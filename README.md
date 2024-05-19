@@ -15,13 +15,15 @@ This language is written in codons of protein instructions next to codons of dat
 | 101101      | Begin and end comment (comments are ascii with a prefix of 0b01, so all ascii letters from 01000000 to 01111111, 64 to 127). |
 | 001100     | Run all readied proteins. The next codon is the protein(s) initial pointer. |
 
-**Note:**  The codon after 110000 (Begin protein) is the proteins **marker**. This identifies the protein. If a marker is ever seen when the ribosome is attachedbut not writing to a protein, the corresponding protein will be *readied*. This means that when the next 001100 (Run) is translated by the ribosome, this protein and all other readied proteins will start executing at the initial pointer (next codon).
+**Important Note:** 000000 (Begin translation) is a **reserved codon.**
+
+The codon after 110000 (Begin protein) is the proteins **marker**. This identifies the protein. If a marker is ever seen when the ribosome is attachedbut not writing to a protein, the corresponding protein will be *readied*. This means that when the next 001100 (Run) is translated by the ribosome, this protein and all other readied proteins will start executing at the initial pointer (next codon).
 
 ### Protein Instructions
 | Instruction | Name | Description + Arguments |
 |-------------|------|-------------------------|
 | 110011      | Substitution | 110011ab replaces all a with b. a and b are not executed, 110011/000000/001100 would not affect the RTU. |
-| 111000      | Step | Step to next (depending on direction) codon. |
+| 111000      | Advance | Step to next (depending on direction) codon. |
 | 100100      | Set Forward | 100100a sets direction to forward when a occurs, steps afterward. |
 | 011011      | Set Backward | 011011a sets direction to backward when a occurs, steps back afterward. |
 | 000100      | Output | 000100a will push a to the output strand (cout/stdout). |
