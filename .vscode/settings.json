@@ -2,5 +2,6 @@
     "files.associations": {
         "*.rs": "rust",
         "*.tcc": "cpp"
-    }
+    },
+    "dimmer.enabled": true
 }
