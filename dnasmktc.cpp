@@ -2,6 +2,8 @@
 // displays the current code on one line and the instructions/arguments the codon represents on a 
 // second line then writes the code to the file DNAsm.bin.
 
+// WIP!!!
+
 #include <iostream>
 #include <fstream>
 #include <string>
