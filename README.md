@@ -19,7 +19,7 @@ This language is written in codons of protein instructions next to codons of dat
 
 The codon after 110000 (Begin protein) is the proteins **marker**. This identifies the protein. If a marker is ever seen when the ribosome is attached but not writing to a protein, the corresponding protein will be *readied*. This means that when the next 001100 (Run) is translated by the ribosome, this protein and all other readied proteins will start executing at the initial pointer (next 4 codons).
 
-**Important Note:** 000000 (Begin translation) is a **reserved codon.** You can not use this codon as data in your program because the RTU will attach to it.
+**Important Note:** 000000 (Begin translation) is a **reserved codon.** You can not use this codon as data in your program because the ribosome will attach to it.
 
 ### Protein Instructions
 
