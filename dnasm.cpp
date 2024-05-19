@@ -30,7 +30,7 @@ The following is from the official DNAsm README:
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <map>
 #include <bitset>
 
 using namespace std;
@@ -57,7 +57,7 @@ int main() {
     // }
     // cout << endl;
     // determine purpose of each codon
-    map<char, string> codon_map;
+    map<char, string>codon_map;
     codon_map[0b000000] = "BegRib";
     codon_map[0b001100] = "EndRib";
     codon_map[0b110000] = "BegPro";
