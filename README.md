@@ -1,5 +1,5 @@
 # DNAsm (Deoxyribonucleic Assembly):
-**An esoteric programming language based off the behavior of DNA.**
+**An esoteric programming language based off the behavior of DNA and RNA.**
 
 This language is written in codons of protein instructions next to codons of data, which the proteins modify or interperet as instructions. Multiple proteins can run simultaneously, and can potentially move along unwanted strings of data.
 
@@ -16,6 +16,8 @@ This language is written in codons of protein instructions next to codons of dat
 | 001100     | Run all readied proteins. The next 4 codons are the protein(s) initial cursor. |
 
 The codon after 110000 (Begin protein) is the proteins **marker**. This identifies the protein. If a marker is ever seen when the ribosome is attachedbut not writing to a protein, the corresponding protein will be *readied*. This means that when the next 001100 (Run) is translated by the ribosome, this protein and all other readied proteins will start executing at the initial pointer (next codon).
+
+**Important Note:** 000000 (Begin translation) is a **reserved codon.** You can not use this codon as data in your program because the RTU will attach to it.
 
 ### Protein Instructions
 | Instruction | Name | Description + Arguments |
