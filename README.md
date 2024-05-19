@@ -20,7 +20,7 @@ This language is written in codons of protein instructions next to codons of dat
 ### Protein Instructions
 | Instruction | Name | Description + Arguments |
 |-------------|------|-------------------------|
-| 110011      | Substitution | instruction 110011ab replaces all a with b. a and b are not executed, 110011/000000/001100 would not affect the RTU. |
+| 110011      | Substitution | 110011ab replaces all a with b. a and b are not executed, 110011/000000/001100 would not affect the RTU. |
 | 111000      | Step | Step to next (depending on direction) codon. |
 | 100100      | Set Forward | 100100a sets direction to forward when a occurs, steps afterward. |
 | 011011      | Set Backward | 011011a sets direction to backward when a occurs, steps back afterward. |
