@@ -1,4 +1,32 @@
-// This program runs DNAsm code from the DNAsm.bin file. 
+/* 
+This program runs DNAsm code from the DNAsm.bin file. 
+The following is from the official DNAsm README:
+## Instructions
+### Ribosome Instructions
+
+| Instruction | Description |
+|-------------|-------------|
+| 000000      | Begin translation, where the ribosome attaches to data string. |
+| 001100      | End translation program, where the ribosome attaches to data string. |
+| 110000      | Begin protein. |
+| 000011      | End protein. |
+| 101101      | Begin and end comment (comments are ascii with a prefix of 0b01, so all ascii letters from 01000000 to 01111111, 64 to 127). |
+| 111111      | Run all readied proteins. The next codon is the protein(s) initial pointer. |
+
+**Note:**  The codon after 110000 (Begin protein) is the proteins **marker**. This identifies the protein. If a marker is ever seen when the ribosome is attachedbut not writing to a protein, the corresponding protein will be *readied*. This means that when the next 111111 (Run) is translated by the ribosome, this protein and all other readied proteins will start executing at the initial pointer (next codon).
+
+### Protein Instructions
+| Instruction | Name | Description + Arguments |
+|-------------|------|-------------------------|
+| 110011      | Substitution | 110011ab replaces all a with b. a and b are not executed, 110011/000000/001100 would not affect the RTU. |
+| 111000      | Step | Step to next (depending on direction) codon. |
+| 100100      | Set Forward | 100100a sets direction to forward when a occurs, steps afterward. |
+| 011011      | Set Backward | 011011a sets direction to backward when a occurs, steps back afterward. |
+| 000100      | Output | 000100a will push a to the output strand (cout/stdout). |
+| 000101      | Output at Cursor | 000101 will output the value of the current location codon to the output strand (cout/stdout). |
+| 100101      | Insert | 100101ab will insert b after a when a is seen. |
+| 011111      | Execute | Execute the codon at the cursor as an instruction. | 
+*/
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -31,5 +59,5 @@ int main() {
     map<char, string> codon_map;
     codon_map[0b000000] = "BegRib";
     codon_map[0b001100] = "EndRib";
-
+    codon_map[0b110000] = "BegPro";
 }
