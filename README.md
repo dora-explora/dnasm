@@ -13,7 +13,7 @@ This language is written in codons of protein instructions next to codons of dat
 | 110000      | Begin protein. |
 | 000011      | End protein. |
 | 101101      | Begin and end comment (comments are ascii with a prefix of 0b01, so all ascii letters from 01000000 to 01111111, 64 to 127). |
-| 111111      | Run all readied proteins. The next codon is the protein(s) initial pointer|
+| 111111      | Run all readied proteins. The next codon is the protein(s) initial pointer. |
 
 **Note:**  The codon after 110000 (Begin protein) is the proteins **marker**. This identifies the protein. If a marker is ever seen when the ribosome is attachedbut not writing to a protein, the corresponding protein will be *readied*. This means that when the next 111111 (Run) is translated by the ribosome, this protein and all other readied proteins will start executing at the initial pointer (next codon).
 
