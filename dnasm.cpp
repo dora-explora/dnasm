@@ -56,11 +56,16 @@ int main() {
     //     cout << bitset<8>(codons[i]) << "/";
     // }
     // cout << endl;
-    // determine purpose of each codon
+    // determine purpose of each codon in (codon, six character string) pairs
     map<char, string> codon_map;
     codon_map[0b000000] = "BegRib";
     codon_map[0b001100] = "EndRib";
     codon_map[0b110000] = "BegPro";
     codon_map[0b000011] = "EndPro";
+    codon_map[0b101101] = "Commnt";
+    codon_map[0b001100] = "RunPro";
+
+    codon_map[0b110011] = "Substi";
+    codon_map[0b111000] = "Step  ";
     
 }
