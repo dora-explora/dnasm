@@ -1,9 +1,11 @@
-# DNAsm (Deoxyribonucleic Assembly):
+# DNAsm (Deoxyribonucleic Assembly)
+
 **An esoteric programming language based off the behavior of DNA and RNA.**
 
 This language is written in codons of protein instructions next to codons of data, which the proteins modify or interperet as instructions. Multiple proteins can run simultaneously, and can potentially move along unwanted strings of data.
 
 ## Instructions
+
 ### Ribosome Instructions
 
 | Instruction | Description |
@@ -20,6 +22,7 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 **Important Note:** 000000 (Begin translation) is a **reserved codon.** You can not use this codon as data in your program because the RTU will attach to it.
 
 ### Protein Instructions
+
 | Instruction | Name | Description + Arguments |
 |-------------|------|-------------------------|
 | 110011      | Substitution | 110011ab replaces all a with b. a and b are not executed, 110011/000000/001100 would not affect the RTU. |
@@ -29,4 +32,4 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 000100      | Output | 000100a will push a to the output strand (cout/stdout). |
 | 000101      | Output at Cursor | 000101 will output the value of the current location codon to the output strand (cout/stdout). |
 | 100101      | Insert | 100101ab will insert b after a when a is seen. |
-| 011111      | Execute | Execute the codon at the cursor as an instruction. | 
+| 011111      | Execute | Execute the codon at the cursor as an instruction. |
