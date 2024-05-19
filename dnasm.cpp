@@ -1,5 +1,5 @@
 /*
-This is a program designed to take in keypresses and convert them to two bit sequences and form them into codons.
+This is a program designed to open the file DNAsm.bin and execute the contents of the file as DNAsm code.
 This is for a esoteric programming language called DeoxyriboNucleic Assembly (DNAsm).
 The following text is from the official DNAsm documentation:
 DNAsm
@@ -35,38 +35,29 @@ on a second line. The program will also write the code to a file called DNAsm.bi
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <bitset>
 
 using namespace std;
 
-int main()
-{
-    char input;
-    string codons;
-    bool keepgoing = true;
-    while (keepgoing) {
-        cin >> input;
-        switch (input) {
-            case 'd':
-                codons += "00";
-                cout << codons << endl;
-                break;
-            case 'f':
-                codons += "01";
-                cout << codons << endl;
-                break;
-            case 'j':
-                codons += "10";
-                cout << codons << endl;
-                break;
-            case 'k':
-                codons += "11";
-                cout << codons << endl;
-                break;
-            case 'x':
-                cout << "final code: " << codons << endl;
-                keepgoing = false;
-                break;
-            }
+int main() {
+    // read file
+    ifstream file("DNAsm.bin", ios::binary | ios::in);
+    char* codons;
+    int length;
+    // open file as array of bytes
+    if (file.is_open()) {
+        file.seekg(0, file.end);
+        length = file.tellg();
+        file.seekg(0, file.beg);
+        codons = new char[length];
+        file.read(codons, length);
+        file.close();
+    } else {
+        cout << "Error: Unable to open file" << endl;
     }
-    cout << "loop done!";
-};
+    // print file contents as binary
+    for (int i = 0; i < length; i++) {
+        cout << bitset<6>(codons[i]) << " ";
+    }
+
+}
