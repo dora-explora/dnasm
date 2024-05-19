@@ -24,7 +24,7 @@ int main() {
     }
     // print file contents as binary
     for (int i = 0; i < length; i++) {
-        cout << bitset<6>(codons[i]) << "/";
+        cout << bitset<8>(codons[i]) << "/";
     }
     cout << endl;
 
