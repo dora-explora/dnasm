@@ -75,4 +75,5 @@ int main() {
     codon_map[0b000101] = "OutCur";
     codon_map[0b100101] = "Insert";
     codon_map[0b011111] = "Execut";
+    
 }
