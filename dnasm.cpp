@@ -27,6 +27,7 @@ int main() {
     //     cout << bitset<8>(codons[i]) << "/";
     // }
     // cout << endl;
-    // 
+    // determine purpose of each codon
+    
 
 }
