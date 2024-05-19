@@ -66,7 +66,7 @@ int main() {
     codon_map[0b001100] = "RunPro";
 
     codon_map[0b110011] = "Substi";
-    codon_map[0b111000] = "Step  ";
+    codon_map[0b111000] = "Advanc";
     codon_map[0b100100] = "SetFwd";
     codon_map[0b011011] = "SetBwd";
     codon_map[0b000100] = "Output";
