@@ -28,6 +28,7 @@ int main() {
     // }
     // cout << endl;
     // determine purpose of each codon
-    
+    map<char, string> codon_map;
+    codon_map[0b000000]
 
 }
