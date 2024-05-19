@@ -23,9 +23,10 @@ int main() {
         cout << "Error: Unable to open file" << endl;
     }
     // print file contents as binary
-    for (int i = 0; i < length; i++) {
-        cout << bitset<8>(codons[i]) << "/";
-    }
-    cout << endl;
+    // for (int i = 0; i < length; i++) {
+    //     cout << bitset<8>(codons[i]) << "/";
+    // }
+    // cout << endl;
+    // 
 
 }
