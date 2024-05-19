@@ -32,7 +32,7 @@ Enzyme Instructions
 This program displays the current code on one line and the instructions/arguments the codon represents
 on a second line. The program will also write the code to a file called DNAsm.bin.
 '''''
-from readchar import readkey
+from readchar import readkey # type: ignore
 
 conversion = {'d': 0b00, 'f': 0b01, 'j': 0b10, 'k': 0b11}
 
