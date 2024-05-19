@@ -7,11 +7,11 @@ The following is from the official DNAsm README:
 | Instruction | Description |
 |-------------|-------------|
 | 000000      | Begin translation, where the ribosome attaches to data string. |
-| 001100      | End translation program, where the ribosome attaches to data string. |
+| 111111      | End translation program, where the ribosome attaches to data string. |
 | 110000      | Begin protein. |
 | 000011      | End protein. |
 | 101101      | Begin and end comment (comments are ascii with a prefix of 0b01, so all ascii letters from 01000000 to 01111111, 64 to 127). |
-| 111111      | Run all readied proteins. The next codon is the protein(s) initial pointer. |
+| 001100      | Run all readied proteins. The next codon is the protein(s) initial pointer. |
 
 **Note:**  The codon after 110000 (Begin protein) is the proteins **marker**. This identifies the protein. If a marker is ever seen when the ribosome is attachedbut not writing to a protein, the corresponding protein will be *readied*. This means that when the next 111111 (Run) is translated by the ribosome, this protein and all other readied proteins will start executing at the initial pointer (next codon).
 
@@ -30,6 +30,7 @@ The following is from the official DNAsm README:
 #include <iostream>
 #include <fstream>
 #include <string>
+
 #include <bitset>
 
 using namespace std;
@@ -60,4 +61,5 @@ int main() {
     codon_map[0b000000] = "BegRib";
     codon_map[0b001100] = "EndRib";
     codon_map[0b110000] = "BegPro";
+    codon_map[0b000011] = "EndPro";
 }
