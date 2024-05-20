@@ -118,6 +118,6 @@ int main() {
         } else {
             decodons[i] = "      ";
         }
-        cout << decodons[i] << endl;
     }
+    for ()
 }
