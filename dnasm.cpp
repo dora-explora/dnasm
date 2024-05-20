@@ -90,6 +90,10 @@ int main() {
             decodons[i] = "Detach";
         } else if (attached && !writing && codons[i] == 0b001100) {
             decodons[i] = "RunPro";
+            decodons[i+1] = "Arg1  ";
+            decodons[i+2] = "Arg2  ";
+            decodons[i+3] = "Arg3  ";
+            de
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing) {
