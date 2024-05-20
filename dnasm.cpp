@@ -60,17 +60,7 @@ int main() {
     // cout << endl;
 
     // determine purpose of each codon in (codon, six character string) pairs
-    map<char, string> codon_map;
-    codon_map[0b110011] = "Substi";
-    codon_map[0b111000] = "Advanc";
-    codon_map[0b100100] = "SetFwd";
-    codon_map[0b011011] = "SetBwd";
-    codon_map[0b000100] = "Output";
-    codon_map[0b000101] = "OutCur";
-    codon_map[0b100101] = "Insert";
-    codon_map[0b011111] = "Execut";
-    codon_map[0b101101] = "Commnt";
-
+    
     bool attached = 0;
     bool writing = 0;
     string* decodons = new string[length];
@@ -98,7 +88,6 @@ int main() {
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing) {
-            decodons[i] = codon_map[codons[i]];
         } else {
             decodons[i] = "      ";
         }
