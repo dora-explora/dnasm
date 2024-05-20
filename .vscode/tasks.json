@@ -9,6 +9,7 @@
                 "-g",
                 "${file}",
                 "-o",
+                "-Wall",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
             "options": {
