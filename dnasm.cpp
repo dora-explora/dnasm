@@ -81,38 +81,38 @@ int main() {
             decodons[i] = "Detach";
         } else if (attached && !writing && codons[i] == 0b001100) {
             decodons[i] = "RunPro";
-            decodons[i+1] = "Arg1  ";
-            decodons[i+2] = "Arg2  ";
-            decodons[i+3] = "Arg3  ";
-            decodons[i+4] = "Arg4  ";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            decodons[i+3] = "Arg 3 ";
+            decodons[i+4] = "Arg 4 ";
             i += 4;
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing && codons[i] == 0b110011) {
             decodons[i] = "Substi";
-            decodons[i+1] = "Arg1  ";
-            decodons[i+2] = "Arg2  ";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
             i += 2;
         } else if (attached && writing && codons[i] == 0b111000) {
-            decodons[i] = "Adv   ";
+            decodons[i] = "Advanc";
         } else if (attached && writing && codons[i] == 0b100100) {
             decodons[i] = "SetFwd";
-            decodons[i+1] = "Arg1  ";
+            decodons[i+1] = "Arg 1 ";
             i++;
         } else if (attached && writing && codons[i] == 0b011011) {
             decodons[i] = "SetBwd";
-            decodons[i+1] = "Arg1  ";
+            decodons[i+1] = "Arg 1 ";
             i++;
         } else if (attached && writing && codons[i] == 0b000100) {
             decodons[i] = "Output ";
-            decodons[i+1] = "Arg1  ";
+            decodons[i+1] = "Arg 1 ";
             i++;
         } else if (attached && writing && codons[i] == 0b000101) {
             decodons[i] = "OutCur";
         } else if (attached && writing && codons[i] == 0b100101) {
-            decodons[i] = "Ins   ";
-            decodons[i+1] = "Arg1  ";
-            decodons[i+2] = "Arg2  ";
+            decodons[i] = "Insert";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
             i += 2;
         } else if (attached && writing && codons[i] == 0b011111) {
             decodons[i] = "Exec  ";
