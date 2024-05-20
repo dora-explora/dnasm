@@ -115,9 +115,9 @@ int main() {
             decodons[i+2] = "Arg 2 ";
             i += 2;
         } else if (attached && writing && codons[i] == 0b011111) {
-            decodons[i] = "Exec  ";
+            decodons[i] = "Execut";
         } else {
-            decodons[i] = "      ";
+            decodons[i] = "Unknwn";
         }
     }
     for (i = 0; i < length; i++) {
