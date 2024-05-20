@@ -81,6 +81,7 @@ int main() {
     for (int i = 0; i < length; i++) {
         if (codons[i] == 0b000000) {
             attached = 1;
+            decodons[i] = 
         } else if (codons[i] == 0b110000 && attached) {
             writing = 1;
         } else if (codons[i] == 0b000011 && attached) {
