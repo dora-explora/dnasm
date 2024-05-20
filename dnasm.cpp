@@ -65,7 +65,8 @@ int main() {
     bool writing = 0;
     string* decodons = new string[length];
     //  loop over codons and determine purpose
-    for (int i = 0; i < length; i++) {
+    int i;
+    for (i = 0; i < length; i++) {
         if (codons[i] == 0b000000) {
             attached = 1;
             decodons[i] = "Attach";
@@ -119,5 +120,7 @@ int main() {
             decodons[i] = "      ";
         }
     }
-    for ()
+    for (i = 0; i < length; i++) {
+        cout << decodons[i] << "/";
+    }
 }
