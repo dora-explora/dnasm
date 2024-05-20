@@ -77,12 +77,11 @@ int main() {
     codon_map[0b011111] = "Execut";
     bool attached = 0;
     bool writing = 0;
-    decodons = new string[length];
+    string* decodons = new string[length];
     for (int i = 0; i < length; i++) {
         if (codons[i] == 0b000000) {
             attached = 1;
-        } else if (codons[i] == 0b110000)
-        {
+        } else if (codons[i] == 0b110000 && attached) {
             /* code */
         }
         
