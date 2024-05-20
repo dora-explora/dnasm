@@ -87,7 +87,9 @@ int main() {
             writing = 0;
         } else if (codons[i] == 0b111111) {
             attached = 0;
-        } else if (attached )
+        } else if (attached && !writing) {
+            decodons[i] = "Ready ";
+        }
         
     }
 }
