@@ -3,5 +3,5 @@
         "*.rs": "rust",
         "*.tcc": "cpp"
     },
-    "dimmer.enabled": false
+    "dimmer.enabled": true
 }
