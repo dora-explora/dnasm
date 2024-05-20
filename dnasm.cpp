@@ -58,7 +58,7 @@ int main() {
     //     cout << bitset<8>(codons[i]) << "/";
     // }
     // cout << endl;
-    
+
     // determine purpose of each codon in (codon, six character string) pairs
     map<char, string> codon_map;
     codon_map[0b110011] = "Substi";
@@ -74,6 +74,7 @@ int main() {
     bool attached = 0;
     bool writing = 0;
     string* decodons = new string[length];
+    //  loop over codons and determine purpose
     for (int i = 0; i < length; i++) {
         if (codons[i] == 0b000000) {
             attached = 1;
