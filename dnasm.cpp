@@ -58,11 +58,9 @@ int main() {
     //     cout << bitset<8>(codons[i]) << "/";
     // }
     // cout << endl;
+    
     // determine purpose of each codon in (codon, six character string) pairs
     map<char, string> codon_map;
-    codon_map[0b101101] = "Commnt";
-    codon_map[0b001100] = "RunPro";
-
     codon_map[0b110011] = "Substi";
     codon_map[0b111000] = "Advanc";
     codon_map[0b100100] = "SetFwd";
@@ -71,6 +69,8 @@ int main() {
     codon_map[0b000101] = "OutCur";
     codon_map[0b100101] = "Insert";
     codon_map[0b011111] = "Execut";
+    codon_map[0b101101] = "Commnt";
+
     bool attached = 0;
     bool writing = 0;
     string* decodons = new string[length];
@@ -88,8 +88,7 @@ int main() {
             attached = 0;
             decodons[i] = "Detach";
         } else if (attached && !writing && codons[i] == 0b001100) {
-
-        
+            decodons[i] = "RunPro";
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing) {
