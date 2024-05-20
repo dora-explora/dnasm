@@ -60,10 +60,6 @@ int main() {
     // cout << endl;
     // determine purpose of each codon in (codon, six character string) pairs
     map<char, string> codon_map;
-    codon_map[0b000000] = "BegRib";
-    codon_map[0b001100] = "EndRib";
-    codon_map[0b110000] = "BegPro";
-    codon_map[0b000011] = "EndPro";
     codon_map[0b101101] = "Commnt";
     codon_map[0b001100] = "RunPro";
 
@@ -84,13 +80,14 @@ int main() {
             decodons[i] = "Attach";
         } else if (codons[i] == 0b110000 && attached) {
             writing = 1;
-            decodons[i] = "BegPro ";
+            decodons[i] = "BegPro";
         } else if (codons[i] == 0b000011 && attached) {
             writing = 0;
-            decodons[i] = "EndPro ";
+            decodons[i] = "EndPro";
         } else if (codons[i] == 0b111111) {
             attached = 0;
             decodons[i] = "Detach";
+        } else if (attached && !writing && )
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing) {
