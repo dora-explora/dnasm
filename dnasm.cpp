@@ -82,7 +82,11 @@ int main() {
         if (codons[i] == 0b000000) {
             attached = 1;
         } else if (codons[i] == 0b110000 && attached) {
-            /* code */
+            writing = 1;
+        } else if (codons[i] == 0b000011 && attached) {
+            writing = 0;
+        } else if (codons[i] == 0b111111) {
+            attached = 0;
         }
         
     }
