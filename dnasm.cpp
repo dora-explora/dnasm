@@ -104,7 +104,7 @@ int main() {
             decodons[i+1] = "Arg 1 ";
             i++;
         } else if (attached && writing && codons[i] == 0b000100) {
-            decodons[i] = "Output ";
+            decodons[i] = "Output";
             decodons[i+1] = "Arg 1 ";
             i++;
         } else if (attached && writing && codons[i] == 0b000101) {
@@ -121,6 +121,6 @@ int main() {
         }
     }
     for (i = 0; i < length; i++) {
-        cout << decodons[i] << "/\n";
+        cout << decodons[i] << "\n";
     }
 }
