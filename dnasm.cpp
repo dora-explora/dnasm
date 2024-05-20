@@ -102,6 +102,6 @@ int main() {
         } else {
             decodons[i] = "      ";
         }
-        cout << decodons[i]
+        cout << decodons[i] << endl;
     }
 }
