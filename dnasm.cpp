@@ -79,19 +79,15 @@ int main() {
         if (codons[i] == 0b000000) {
             attached = 1;
             decodons[i] = "Attach";
-            break;
         } else if (codons[i] == 0b110000 && attached) {
             writing = 1;
             decodons[i] = "BegPro";
-            break;
         } else if (codons[i] == 0b000011 && attached) {
             writing = 0;
             decodons[i] = "EndPro";
-            break;
         } else if (codons[i] == 0b111111) {
             attached = 0;
             decodons[i] = "Detach";
-            break;
         } else if (attached && !writing && codons[i] == 0b001100) {
             decodons[i] = "RunPro";
             decodons[i+1] = "Arg1  ";
@@ -99,17 +95,13 @@ int main() {
             decodons[i+3] = "Arg3  ";
             decodons[i+4] = "Arg4  ";
             i += 4;
-            break;
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
-            break;
         } else if (attached && writing) {
             decodons[i] = codon_map[codons[i]];
-            break;
         } else {
             decodons[i] = "      ";
-            break;
         }
-        
+        cout << decodons[i]
     }
 }
