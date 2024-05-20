@@ -79,9 +79,11 @@ int main() {
         if (codons[i] == 0b000000) {
             attached = 1;
             decodons[i] = "Attach";
+            break
         } else if (codons[i] == 0b110000 && attached) {
             writing = 1;
             decodons[i] = "BegPro";
+            break
         } else if (codons[i] == 0b000011 && attached) {
             writing = 0;
             decodons[i] = "EndPro";
@@ -93,7 +95,8 @@ int main() {
             decodons[i+1] = "Arg1  ";
             decodons[i+2] = "Arg2  ";
             decodons[i+3] = "Arg3  ";
-            de
+            decodons[i+4] = "Arg4  ";
+            i += 4;
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing) {
