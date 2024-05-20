@@ -97,15 +97,15 @@ int main() {
         } else if (attached && writing && codons[i] == 0b100100) {
             decodons[i] = "SetFwd";
             decodons[i+1] = "Arg1  ";
-            i += 1;
+            i++;
         } else if (attached && writing && codons[i] == 0b011011) {
             decodons[i] = "SetBwd";
             decodons[i+1] = "Arg1  ";
-            i += 1;
+            i++;
         } else if (attached && writing && codons[i] == 0b000100) {
-            decodons[i] = "Ou ";
+            decodons[i] = "Output ";
             decodons[i+1] = "Arg1  ";
-            i += 1;
+            i++;
         } else if (attached && writing && codons[i] == 0b000101) {
             decodons[i] = "OutCur";
         } else if (attached && writing && codons[i] == 0b100101) {
