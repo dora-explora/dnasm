@@ -89,7 +89,7 @@ int main() {
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing && codons[i] == 0b110011) {
-            decodons[i] = "Subst ";
+            decodons[i] = "Substi";
             decodons[i+1] = "Arg1  ";
             decodons[i+2] = "Arg2  ";
             i += 2;
