@@ -30,6 +30,6 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 100100      | Set Forward | 100100a sets direction to forward when a occurs, steps afterward. |
 | 011011      | Set Backward | 011011a sets direction to backward when a occurs, steps back afterward. |
 | 000100      | Output | 000100a will push a to the output strand (cout/stdout). |
-| 000101      | Output at Cursor | 000101 will output the value of the current location codon to the output strand (cout/stdout). |
+| 000101      | Output at Cursor | Outputs the value of the current location codon to the output strand (cout/stdout). |
 | 100101      | Insert | 100101ab will insert b after a when a is seen. |
 | 011111      | Execute | Execute the codon at the cursor as an instruction. |
