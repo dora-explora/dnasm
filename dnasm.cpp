@@ -87,7 +87,34 @@ int main() {
             i += 4;
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
-        } else if (attached && writing) {
+        } else if (attached && writing && codons[i] == 0b110011) {
+            decodons[i] = "Subst ";
+            decodons[i+1] = "Arg1  ";
+            decodons[i+2] = "Arg2  ";
+            i += 2;
+        } else if (attached && writing && codons[i] == 0b111000) {
+            decodons[i] = "Adv   ";
+        } else if (attached && writing && codons[i] == 0b100100) {
+            decodons[i] = "SetFwd";
+            decodons[i+1] = "Arg1  ";
+            i += 1;
+        } else if (attached && writing && codons[i] == 0b011011) {
+            decodons[i] = "SetBwd";
+            decodons[i+1] = "Arg1  ";
+            i += 1;
+        } else if (attached && writing && codons[i] == 0b000100) {
+            decodons[i] = "Ou ";
+            decodons[i+1] = "Arg1  ";
+            i += 1;
+        } else if (attached && writing && codons[i] == 0b000101) {
+            decodons[i] = "OutCur";
+        } else if (attached && writing && codons[i] == 0b100101) {
+            decodons[i] = "Ins   ";
+            decodons[i+1] = "Arg1  ";
+            decodons[i+2] = "Arg2  ";
+            i += 2;
+        } else if (attached && writing && codons[i] == 0b011111) {
+            decodons[i] = "Exec  ";
         } else {
             decodons[i] = "      ";
         }
