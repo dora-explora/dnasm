@@ -78,9 +78,9 @@ int main() {
     bool attached = 0;
     bool writing = 0;
     for (int i = 0; i < length; i++) {
-        if codons[i] == 0b000000 {
+        if (codons[i] == 0b000000) {
             attached = 1;
-        } else if (/* condition */)
+        } else if (codons[i] == 0b110000)
         {
             /* code */
         }
