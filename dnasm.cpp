@@ -37,6 +37,13 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 
 using namespace std;
 
+class Enzyme {
+    int length;
+    char* codons;
+    string* decodons;
+};
+
+
 int main() {
     // read file
     ifstream file("DNAsm.bin", ios::binary | ios::in);
@@ -60,7 +67,6 @@ int main() {
     // cout << endl;
 
     // determine purpose of each codon in (codon, six character string) pairs
-    
     bool attached = 0;
     bool writing = 0;
     string* decodons = new string[length];
