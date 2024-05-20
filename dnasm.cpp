@@ -91,7 +91,7 @@ int main() {
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing) {
-            decodons[i] = "Write ";
+            decodons[i] = codon_map[codons[i]];
         } else {
             decodons[i] = "      ";
         }
