@@ -121,6 +121,6 @@ int main() {
         }
     }
     for (i = 0; i < length; i++) {
-        cout << decodons[i] << "/";
+        cout << decodons[i] << "/\n";
     }
 }
