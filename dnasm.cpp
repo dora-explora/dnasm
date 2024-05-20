@@ -81,13 +81,16 @@ int main() {
     for (int i = 0; i < length; i++) {
         if (codons[i] == 0b000000) {
             attached = 1;
-            decodons[i] = 
+            decodons[i] = "Attach";
         } else if (codons[i] == 0b110000 && attached) {
             writing = 1;
+            decodons[i] = "BegPro ";
         } else if (codons[i] == 0b000011 && attached) {
             writing = 0;
+            decodons[i] = "EndPro ";
         } else if (codons[i] == 0b111111) {
             attached = 0;
+            decodons[i] = "Detach";
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing) {
