@@ -90,6 +90,10 @@ int main() {
             attached = 0;
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
+        } else if (attached && writing) {
+            decodons[i] = "Write ";
+        } else {
+            decodons[i] = "      ";
         }
         
     }
