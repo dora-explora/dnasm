@@ -42,8 +42,8 @@ class Enzyme {
     int cursor;
     char* codons;
     string* decodons;
-    void output(char input) {
-        cout << bitset<6
+    void output(char inpu) {
+        cout << bitset<6>input << endl;
     }
 };
 
