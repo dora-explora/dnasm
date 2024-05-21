@@ -128,7 +128,7 @@ int main() {
         } else if (attached && writing && codons[i] == 0b011111) {
             decodons[i] = "Execut";
         } else {
-            decodons[i] = "Unknwn";
+            decodons[i] = "Empty ";
         }
     }
     for (i = 0; i < length; i++) {
