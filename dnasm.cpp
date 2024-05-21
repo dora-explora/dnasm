@@ -87,7 +87,7 @@ int main() {
         } else if (codons[i] == 0b000011 && attached) {
             writing = 0;
             decodons[i] = "EndPro";
-        } else if (codons[i] == 0b111111 && writing) {
+        } else if (codons[i] == 0b111111 && attached) {
             attached = 0;
             decodons[i] = "Detach";
         } else if (attached && !writing && codons[i] == 0b001100) {
