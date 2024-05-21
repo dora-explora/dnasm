@@ -42,6 +42,7 @@ class Enzyme {
     int cursor;
     char* codons;
     string* decodons;
+    void output
 };
 
 
