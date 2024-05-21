@@ -43,7 +43,7 @@ class Enzyme {
     char* codons;
     string* decodons;
     void output(char input) {
-        cout << input << endl;
+        cout << bitset<6>(input) << endl;
     }
 };
 
