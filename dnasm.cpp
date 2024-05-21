@@ -38,10 +38,20 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 using namespace std;
 
 class Enzyme {
-    int length;
-    int cursor;
     char* codons;
     string* decodons;
+    int length;
+    int cursor;
+    int instrptr;
+
+    Enzyme(char* codons, string* decodons, int cursor) {
+        codons;
+        decodons;
+        length = sizeof(codons);
+        cursor;
+        instrptr = 0;
+    }
+
     void output(char input) {
         cout << bitset<6>(input) << endl;
     }
