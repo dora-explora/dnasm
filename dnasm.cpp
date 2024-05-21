@@ -39,6 +39,7 @@ using namespace std;
 
 class Enzyme {
     int length;
+    int cursor;
     char* codons;
     string* decodons;
 };
