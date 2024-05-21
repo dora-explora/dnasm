@@ -49,6 +49,7 @@ int main() {
     ifstream file("DNAsm.bin", ios::binary | ios::in);
     char* codons;
     int length;
+    map <char, Enzyme> enzymes;
     // open file as array of bytes
     if (file.is_open()) {
         file.seekg(0, file.end);
