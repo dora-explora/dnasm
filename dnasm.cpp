@@ -157,7 +157,7 @@ int main() {
             i++;
             workingmarker = codons[i];
             for (; writing; i++) {
-                
+                // add all the codons to working codons/decodons and make an enzyme out of it
             }
         }
     }
