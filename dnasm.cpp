@@ -34,6 +34,7 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 #include <string>
 #include <map>
 #include <bitset>
+#include <vector>
 
 using namespace std;
 
@@ -42,7 +43,7 @@ class Enzyme {
     string* decodons;
     int length;
     int cursor;
-    int instrptr;
+    int instrptr; // instruction pointer
 
     Enzyme(char* codons, string* decodons, int cursor) {
         codons;
@@ -63,7 +64,7 @@ int main() {
     ifstream file("DNAsm.bin", ios::binary | ios::in);
     char* codons;
     int length;
-    map <char, Enzyme> enzymes;
+    map<char, Enzyme> enzymes;
     // open file as array of bytes
     if (file.is_open()) {
         file.seekg(0, file.end);
@@ -94,6 +95,8 @@ int main() {
         } else if (codons[i] == 0b110000 && attached) {
             writing = 1;
             decodons[i] = "BegPro";
+            decodons[i+1] = "Marker";
+            i++;
         } else if (codons[i] == 0b000011 && attached) {
             writing = 0;
             decodons[i] = "EndPro";
@@ -143,5 +146,16 @@ int main() {
     }
     for (i = 0; i < length; i++) {
         cout << decodons[i] << "\n";
+    }
+    char workingmarker;
+    char* workingcodons;
+    string* workingdecodons;
+    int workingcursor;
+    for (i = 0; i < length; i++) {
+        if (decodons[i] == "BegPro") {
+            writing = 1;
+            i++;
+            workingmarker = codons[i];
+        }
     }
 }
