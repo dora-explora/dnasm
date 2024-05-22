@@ -156,8 +156,9 @@ int main() {
             writing = 1;
             i++;
             workingmarker = codons[i];
-            for (writing; i++)
+            for (; writing; i++) {
 
+            }
         }
     }
 }
