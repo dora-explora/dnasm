@@ -3,5 +3,6 @@
         "*.rs": "rust",
         "*.tcc": "cpp"
     },
-    "dimmer.enabled": false
+    "dimmer.enabled": false,
+    "C_Cpp.errorSquiggles": "disabled"
 }
