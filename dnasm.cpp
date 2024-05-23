@@ -11,16 +11,16 @@ using namespace std;
 
 class Enzyme {
     public:
-    char* codons;
-    string* decodons;
+    vector<char> codons;
+    vector<string> decodons;
     int length;
     int cursor;
     int instrptr; // instruction pointer
 
-    Enzyme(char* codons, string* decodons) {
-        codons;
-        decodons;
-        length = sizeof(codons);
+    Enzyme(vector<char> incodons, vector<string> indecodons) {
+        codons = incodons;
+        decodons = indecodons;
+        length = sizeof(incodons); // idk about this one
         cursor = 0;
         instrptr = 0;
     }
@@ -119,9 +119,9 @@ int main() {
         cout << decodons[i] << "\n";
     }
     char workingmarker;
-    char* workingcodons;
+    vector<char> workingcodons;
     vector<char> markers;
-    string* workingdecodons;
+    vector<string> workingdecodons;
     int workingcursor;
     map<char, Enzyme> enzymes;
     for (i = 0; i < length; i++) {
@@ -134,13 +134,16 @@ int main() {
                 if (decodons[i] == "EndPro") {
                     writing = false;
                 } else {
-                    workingcodons[i] = codons[i];
-                    workingdecodons[i] = decodons[i];
+                    workingcodons.push_back(codons[i]);
+                    workingdecodons.push_back(decodons[i]);
                 }
                 // add all the codons to working codons/decodons and make an enzyme out of it
             }
+            enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
         }
-        enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
-        markers.push_back(workingmarker);
     }
+    Enzyme the_enzyme = enzymes.find(0b010101)->second;
+    // for (i = 0; i < the_enzyme.length; i++) {
+    //     the_enzyme.codons[i];
+    // }
 }
