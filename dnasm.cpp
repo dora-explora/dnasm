@@ -2,10 +2,11 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <algorithm>
 #include <map>
-#include <bitset>
 #include <vector>
+#include <string>
+#include <bitset>
 
 using namespace std;
 
@@ -58,8 +59,7 @@ int main() {
     bool writing = 0;
     string* decodons = new string[length];
     //  loop over codons and determine purpose
-    int i;
-    for (i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++) {
         if (codons[i] == 0b000000) {
             attached = 1;
             decodons[i] = "Attach";
@@ -115,7 +115,7 @@ int main() {
             decodons[i] = "      ";
         }
     }
-    for (i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++) {
         cout << "0b" << bitset<6>(codons[i]) << "  -  " << decodons[i] << endl;
     }
     char workingmarker;
@@ -124,7 +124,7 @@ int main() {
     vector<string> workingdecodons;
     int workingcursor;
     map<char, Enzyme> enzymes;
-    for (i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++) {
         if (decodons[i] == "BegPro") {
             writing = 1;
             i++;
@@ -142,10 +142,10 @@ int main() {
             enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
         }
     }
-    for_each(markers.cbegin, markers.cend, [](char marker)) {
-        Enzyme currentenzyme = enzymes[marker];
-        for (i = 0; i <= currentenzyme.length; i++) {
-            cout << "0b" << bitset<6>(currentenzyme.codons[i]) << "  -  " << currentenzyme.decodons[i] << endl;
+    for (int i = 0; i < markers.size(); i++) {
+        Enzyme currentenzyme = enzymes.at(markers[i])->second.length;
+        for (int j = 0; j < currentenzyme.length; j++) {
+            cout << "0b" << bitset<6>(currentenzyme.codons[j]) << "  -  " << currentenzyme.decodons[j] << endl;
         }
     }
 }
