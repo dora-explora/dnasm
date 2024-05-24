@@ -115,6 +115,7 @@ int main() {
             decodons[i] = "      ";
         }
     }
+    cout << "Codons/Decodons: " << endl;
     for (int i = 0; i < length; i++) {
         cout << "0b" << bitset<6>(codons[i]) << "  -  " << decodons[i] << endl;
     }
@@ -141,12 +142,15 @@ int main() {
                 // add all the codons to working codons/decodons and make an enzyme out of it
             }
             enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
+            i--;
         }
     }
     for (int i = 0; i < markers.size(); i++) {
         Enzyme currentenzyme = enzymes.at(markers[i]);
+        cout << "\nEnzyme " << i << " with marker " << bitset<6>(markers[i]) << endl;
         for (int j = 0; j <= currentenzyme.length; j++) {
             cout << "0b" << bitset<6>(currentenzyme.codons[j]) << "  -  " << currentenzyme.decodons[j] << endl;
         }
     }
+    // add loop for readying
 }
