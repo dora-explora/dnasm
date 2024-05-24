@@ -143,7 +143,7 @@ int main() {
         }
     }
     for (int i = 0; i < markers.size(); i++) {
-        Enzyme currentenzyme = enzymes.at(markers[i])->second.length;
+        Enzyme currentenzyme = enzymes.at(markers[i]);
         for (int j = 0; j < currentenzyme.length; j++) {
             cout << "0b" << bitset<6>(currentenzyme.codons[j]) << "  -  " << currentenzyme.decodons[j] << endl;
         }
