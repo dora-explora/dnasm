@@ -20,7 +20,7 @@ class Enzyme {
     Enzyme(vector<char> incodons, vector<string> indecodons) {
         codons = incodons;
         decodons = indecodons;
-        length = sizeof(incodons); // idk about this one
+        length = incodons.size() - 1;
         cursor = 0;
         instrptr = 0;
     }
@@ -116,7 +116,7 @@ int main() {
         }
     }
     for (i = 0; i < length; i++) {
-        cout << decodons[i] << "\n";
+        cout << "0b" << bitset<6>(codons[i]) << "  -  " << decodons[i] << endl;
     }
     char workingmarker;
     vector<char> workingcodons;
@@ -142,8 +142,10 @@ int main() {
             enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
         }
     }
-    Enzyme the_enzyme = enzymes.find(0b010101)->second;
-    // for (i = 0; i < the_enzyme.length; i++) {
-    //     the_enzyme.codons[i];
-    // }
+    for_each(markers.cbegin, markers.cend, [](char marker)) {
+        Enzyme currentenzyme = enzymes[marker];
+        for (i = 0; i <= currentenzyme.length; i++) {
+            cout << "0b" << bitset<6>(currentenzyme.codons[i]) << "  -  " << currentenzyme.decodons[i] << endl;
+        }
+    }
 }
