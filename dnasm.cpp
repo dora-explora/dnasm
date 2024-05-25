@@ -142,6 +142,8 @@ int main() {
                 // add all the codons to working codons/decodons and make an enzyme out of it
             }
             enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
+            workingcodons.clear();
+            workingdecodons.clear();
             i--;
         }
     }
