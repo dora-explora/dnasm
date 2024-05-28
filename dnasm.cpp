@@ -123,7 +123,6 @@ int main() {
     vector<char> workingcodons;
     vector<char> markers;
     vector<string> workingdecodons;
-    int workingcursor;
     map<char, Enzyme> enzymes;
     for (int i = 0; i < length; i++) {
         if (decodons[i] == "BegPro") {
@@ -160,7 +159,10 @@ int main() {
         if (decodons[i] == "Ready") {
             workingmarkers.push_back(codons[i]);
         } else if (decodons[i] == "RunPro") {
-            workingcursor |= 
+            workingcursor |= codons[i+1] << 18;
+            workingcursor |= codons[i+2] << 12;
+            workingcursor |= codons[i+3] << 6;
+            workingcursor |= codons[i+4];
         }
     }
 }
