@@ -154,5 +154,13 @@ int main() {
             cout << "0b" << bitset<6>(currentenzyme.codons[j]) << "  -  " << currentenzyme.decodons[j] << endl;
         }
     }
-    // add loop for readying
+    vector<char> workingmarkers;
+    int workingcursor = 0;
+    for (int i = 0; i < length; i++) {
+        if (decodons[i] == "Ready") {
+            workingmarkers.push_back(codons[i]);
+        } else if (decodons[i] == "RunPro") {
+            workingcursor |= 
+        }
+    }
 }
