@@ -153,16 +153,21 @@ int main() {
             cout << "0b" << bitset<6>(currentenzyme.codons[j]) << "  -  " << currentenzyme.decodons[j] << endl;
         }
     }
-    vector<char> workingmarkers;
+    vector<char> readiedmarkers;
     int workingcursor = 0;
+    // loop for readying and running proteins
     for (int i = 0; i < length; i++) {
         if (decodons[i] == "Ready") {
-            workingmarkers.push_back(codons[i]);
+            readiedmarkers.push_back(codons[i]);
         } else if (decodons[i] == "RunPro") {
             workingcursor |= codons[i+1] << 18;
             workingcursor |= codons[i+2] << 12;
             workingcursor |= codons[i+3] << 6;
             workingcursor |= codons[i+4];
+            for (int j = 0; j < readiedmarkers.size(); j++) {
+                enzymes.at(readiedmarkers[i]).cursor = workingcursor;
+            }
+            readiedmarkers.empty();
         }
     }
 }
