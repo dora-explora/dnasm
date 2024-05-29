@@ -25,7 +25,9 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 
 | Instruction | Name | Description + Arguments |
 |-------------|------|-------------------------|
-| 110011      | Substitution | 110011ab replaces all a with b. a and b are not executed, 110011/000000/001100 would not affect the RTU. |
+| 001111      | Cursor Jump | 110011abcd sets the cursor to abcd. (0 - 2^24) |
+| 111100      | Instruction Jump | 110011abcd sets the intstruction pointer to abcd. (0 - 2^24) |
+| 110011      | Substitution | 110011ab replaces all a seen in the future with b. |
 | 111000      | Advance | Step to next (depending on direction) codon. |
 | 100100      | Set Forward | 100100a sets direction to forward when a occurs, steps afterward. |
 | 011011      | Set Backward | 011011a sets direction to backward when a occurs, steps back afterward. |
