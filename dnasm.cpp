@@ -170,4 +170,5 @@ int main() {
             readiedmarkers.empty();
         }
     }
+    // go do the table code for the jump codons you silly goose
 }
