@@ -32,9 +32,13 @@ class Enzyme {
         int offset = 0;
         string current = decodons[instrptr];
         if (current == "JmpCur") {
-            cursor = codons[instrptr + 1];
+            cursor = 0;
+            cursor |= codons[instrptr + 1] << 18;
+            cursor |= codons[instrptr + 1] << 18;
+            cursor |= codons[instrptr + 1] << 18;
+            cursor |= codons[instrptr + 1];
             cout << bitset<24>(cursor);
-            offset++;
+            offset += 4;
         } else if (current == "JmpIns") {
             instrptr = codons[instrptr + 1];
             cout << bitset<24>(instrptr);
