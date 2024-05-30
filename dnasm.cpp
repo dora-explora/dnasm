@@ -54,7 +54,9 @@ class Enzyme {
     };
 };
 
+int runenz(char marker) {
 
+}
 int main() {
     // read file
     ifstream file("DNAsm.bin", ios::binary | ios::in);
