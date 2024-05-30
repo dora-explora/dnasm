@@ -54,8 +54,8 @@ class Enzyme {
     };
 };
 
-int runenz(char marker, vector<Enzyme> enzymes) {
-    return E
+int runenz(char marker, map<Enzyme> enzymes) {
+    return enzymes.at(marker)->second.
 }
 int main() {
     // read file
