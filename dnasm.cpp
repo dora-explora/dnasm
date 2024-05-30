@@ -55,7 +55,7 @@ class Enzyme {
 };
 
 int runenz(char marker, map<Enzyme> enzymes) {
-    return enzymes.at(marker)->second.
+    return enzymes.at(marker).run();
 }
 int main() {
     // read file
