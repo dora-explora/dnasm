@@ -26,8 +26,8 @@ class Enzyme {
         instrptr = 0;
     }
 
-    void output(char input) {
-        cout << bitset<6>(input) << endl;
+    void run {
+        
     }
 };
 
@@ -178,5 +178,5 @@ int main() {
     delete[] codons;
     delete[] decodons;
 
-    return 0
+    return 0;
 }
