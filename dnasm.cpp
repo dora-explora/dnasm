@@ -37,7 +37,7 @@ class Enzyme {
             offset++;
         } else if (current == "JmpIns") {
             instrptr = codons[instrptr + 1];
-            cout << bitset<6>(cursor);
+            cout << bitset<6>(instrptr);
             offset++;
         } else if (current == "") {
             
