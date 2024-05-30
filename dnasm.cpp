@@ -26,7 +26,7 @@ class Enzyme {
         instrptr = 0;
     }
 
-    int run {
+    int run() {
         return 0;
     };
 };
