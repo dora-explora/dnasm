@@ -201,7 +201,7 @@ int main() {
             readiedmarkers.empty();
         }
     }
-    i = enzymes.at(markers[1]).run()
+    int i = enzymes.at(markers[1]).step();
 
 
     delete[] codons;
