@@ -52,7 +52,7 @@ class Enzyme {
         } else if (current == "Substi") {
             subarg1 = codons[instrptr + 1];
             subarg2 = codons[instrptr + 2];
-            
+            offset = 2;
         } else if (current == "") {
             
         } else if (current == "") {
