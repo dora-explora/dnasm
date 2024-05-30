@@ -190,7 +190,7 @@ int main() {
         if (decodons[i] == "Ready") {
             readiedmarkers.push_back(codons[i]);
         } else if (decodons[i] == "RunPro") {
-            workingcursor |= codons[i+1] << 18;
+            workingcursor |= codons[i+1] << 24;
             workingcursor |= codons[i+2] << 16;
             workingcursor |= codons[i+3] << 8;
             workingcursor |= codons[i+4];
