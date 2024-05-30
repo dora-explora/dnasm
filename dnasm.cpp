@@ -26,9 +26,9 @@ class Enzyme {
         instrptr = 0;
     }
 
-    int run() {
-        return 0;
-    };
+    void run {
+        
+    }
 };
 
 
@@ -60,108 +60,63 @@ int main() {
     string* decodons = new string[length];
     //  loop over codons and determine purpose
     for (int i = 0; i < length; i++) {
-        switch (codons[i]) {
-            case 0b000000:
-                attached = 1;
-                decodons[i] = "Attach";
-                break;
-            case 0b110000:
-                if (attached) {
-                    writing = 1;
-                    decodons[i] = "BegPro";
-                    decodons[i+1] = "Marker";
-                    i++;
-                }
-                break;
-            case 0b000011:
-                if (attached) {
-                    writing = 0;
-                    decodons[i] = "EndPro";
-                }
-                break;
-            case 0b111111:
-                if (attached) {
-                    attached = 0;
-                    decodons[i] = "Detach";
-                }
-                break;
-            case 0b001100:
-                if (attached && !writing) {
-                    decodons[i] = "RunPro";
-                    decodons[i+1] = "Arg 1 ";
-                    decodons[i+2] = "Arg 2 ";
-                    decodons[i+3] = "Arg 3 ";
-                    decodons[i+4] = "Arg 4 ";
-                    i += 4;
-                }
-                break;
-            case 0b001111:
-                if (attached && writing) {
-                    decodons[i] = "JmpCur";
-                }
-                break;
-            case 0b111100:
-                if (attached && writing) {
-                    decodons[i] = "JmpIns";
-                }
-                break;
-            case 0b110011:
-                if (attached && writing) {
-                    decodons[i] = "Substi";
-                    decodons[i+1] = "Arg 1 ";
-                    decodons[i+2] = "Arg 2 ";
-                    i += 2;
-                }
-                break;
-            case 0b111000:
-                if (attached && writing) {
-                    decodons[i] = "Advanc";
-                }
-                break;
-            case 0b100100:
-                if (attached && writing) {
-                    decodons[i] = "SetFwd";
-                    decodons[i+1] = "Arg 1 ";
-                    i++;
-                }
-                break;
-            case 0b011011:
-                if (attached && writing) {
-                    decodons[i] = "SetBwd";
-                    decodons[i+1] = "Arg 1 ";
-                    i++;
-                }
-                break;
-            case 0b000100:
-                if (attached && writing) {
-                    decodons[i] = "Output";
-                    decodons[i+1] = "Arg 1 ";
-                    i++;
-                }
-                break;
-            case 0b000101:
-                if (attached && writing) {
-                    decodons[i] = "OutCur";
-                }
-                break;
-            case 0b100101:
-                if (attached && writing) {
-                    decodons[i] = "Insert";
-                    decodons[i+1] = "Arg 1 ";
-                    decodons[i+2] = "Arg 2 ";
-                    i += 2;
-                }
-                break;
-            case 0b011111:
-                if (attached && writing) {
-                    decodons[i] = "Execut";
-                }
-                break;
-            default:
-                if (attached && writing) {
-                    decodons[i] = "      ";
-                }
-                break;
+        if (codons[i] == 0b000000) {
+            attached = 1;
+            decodons[i] = "Attach";
+        } else if (codons[i] == 0b110000 && attached) {
+            writing = 1;
+            decodons[i] = "BegPro";
+            decodons[i+1] = "Marker";
+            i++;
+        } else if (codons[i] == 0b000011 && attached) {
+            writing = 0;
+            decodons[i] = "EndPro";
+        } else if (codons[i] == 0b111111 && attached) {
+            attached = 0;
+            decodons[i] = "Detach";
+        } else if (attached && !writing && codons[i] == 0b001100) {
+            decodons[i] = "RunPro";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            decodons[i+3] = "Arg 3 ";
+            decodons[i+4] = "Arg 4 ";
+            i += 4;
+        } else if (attached && !writing) {
+            decodons[i] = "Ready ";
+        } else if (attached && writing && codons[i] == 0b001111) {
+            decodons[i] = "JmpCur";
+        } else if (attached && writing && codons[i] == 0b111100) {
+            decodons[i] = "JmpIns";
+        } else if (attached && writing && codons[i] == 0b110011) {
+            decodons[i] = "Substi";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            i += 2;
+        } else if (attached && writing && codons[i] == 0b111000) {
+            decodons[i] = "Advanc";
+        } else if (attached && writing && codons[i] == 0b100100) {
+            decodons[i] = "SetFwd";
+            decodons[i+1] = "Arg 1 ";
+            i++;
+        } else if (attached && writing && codons[i] == 0b011011) {
+            decodons[i] = "SetBwd";
+            decodons[i+1] = "Arg 1 ";
+            i++;
+        } else if (attached && writing && codons[i] == 0b000100) {
+            decodons[i] = "Output";
+            decodons[i+1] = "Arg 1 ";
+            i++;
+        } else if (attached && writing && codons[i] == 0b000101) {
+            decodons[i] = "OutCur";
+        } else if (attached && writing && codons[i] == 0b100101) {
+            decodons[i] = "Insert";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            i += 2;
+        } else if (attached && writing && codons[i] == 0b011111) {
+            decodons[i] = "Execut";
+        } else {
+            decodons[i] = "      ";
         }
     }
     cout << "Codons/Decodons: " << endl;
