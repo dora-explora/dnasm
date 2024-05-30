@@ -55,7 +55,7 @@ class Enzyme {
 };
 
 int runenz(char marker, vector<char> markers, vector<Enzyme> enzymes) {
-    
+    return markers
 }
 int main() {
     // read file
