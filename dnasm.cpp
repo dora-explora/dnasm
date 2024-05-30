@@ -211,7 +211,7 @@ int main() {
             readiedmarkers.empty();
         }
     }
-    int i = enzymes.at(markers[1]).step();
+    cout << enzymes.at(markers[1]).step() << endl;
 
 
     delete[] codons;
