@@ -83,6 +83,10 @@ int main() {
             i += 4;
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
+        } else if (attached && writing && codons[i] == 0b001111) {
+            decodons[i] = "JmpCur";
+        } else if (attached && writing && codons[i] == 0b111100) {
+            decodons[i] = "JmpIns";
         } else if (attached && writing && codons[i] == 0b110011) {
             decodons[i] = "Substi";
             decodons[i+1] = "Arg 1 ";
@@ -170,5 +174,4 @@ int main() {
             readiedmarkers.empty();
         }
     }
-    // go do the table code for the jump codons you silly goose
 }
