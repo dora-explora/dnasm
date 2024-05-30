@@ -40,11 +40,11 @@ class Enzyme {
             cout << bitset<24>(cursor);
             offset = 4;
         } else if (current == "JmpIns") {
-            cursor = 0;
-            cursor |= codons[instrptr + 1] << 18;
-            cursor |= codons[instrptr + 2] << 12;
-            cursor |= codons[instrptr + 3] << 6;
-            cursor |= codons[instrptr + 4];
+            instrptr = 0;
+            instrptr |= codons[instrptr + 1] << 18;
+            instrptr |= codons[instrptr + 2] << 12;
+            instrptr |= codons[instrptr + 3] << 6;
+            instrptr |= codons[instrptr + 4];
             cout << bitset<24>(cursor);
             offset = 4;
         } else if (current == "") {
