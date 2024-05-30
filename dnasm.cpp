@@ -31,7 +31,9 @@ class Enzyme {
     int step() {
         int offset = 0;
         string current = decodons[instrptr];
-        if (current == "JmpCur") {
+        if {
+
+        } else if (current == "JmpCur") {
             cursor = 0;
             cursor |= codons[instrptr + 1] << 18;
             cursor |= codons[instrptr + 2] << 12;
