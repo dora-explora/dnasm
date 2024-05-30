@@ -17,6 +17,8 @@ class Enzyme {
     int length; // length of enzymes code, starts at 0 (for iterating)
     int cursor; // cursor for where the enzyme is in the code
     int instrptr; // instruction pointer
+    char subarg1; // first arg for substitution 
+    char subarg2; // second arg for substitution 
 
     Enzyme(vector<char> incodons, vector<string> indecodons) {
         codons = incodons;
@@ -29,10 +31,22 @@ class Enzyme {
     int run() {
         int offset = 0;
         string current = decodons[instrptr];
-        if(current == "JmpCur") {
+        if (current == "JmpCur") {
             cursor = codons[instrptr + 1];
             cout << bitset<6>(cursor);
             offset++;
+        } else if (current == "JmpIns") {
+            
+        } else if (current == "") {
+            
+        } else if (current == "") {
+            
+        } else if (current == "") {
+
+        } else if (current == "") {
+
+        } else if (current == "") {
+
         }
         return offset;
     };
@@ -92,6 +106,11 @@ int main() {
             decodons[i] = "Ready ";
         } else if (attached && writing && codons[i] == 0b001111) {
             decodons[i] = "JmpCur";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            decodons[i+3] = "Arg 3 ";
+            decodons[i+4] = "Arg 4 ";
+            i += 4;
         } else if (attached && writing && codons[i] == 0b111100) {
             decodons[i] = "JmpIns";
         } else if (attached && writing && codons[i] == 0b110011) {
@@ -128,7 +147,7 @@ int main() {
     }
     cout << "Codons/Decodons: " << endl;
     for (int i = 0; i < length; i++) {
-        cout << "0b" << bitset<6>(codons[i]) << "  -  " << decodons[i] << endl;
+        cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
     }
     char workingmarker;
     vector<char> workingcodons;
@@ -161,7 +180,7 @@ int main() {
         Enzyme currentenzyme = enzymes.at(markers[i]);
         cout << "\nEnzyme " << i << " with marker " << bitset<6>(markers[i]) << endl;
         for (int j = 0; j <= currentenzyme.length; j++) {
-            cout << "0b" << bitset<6>(currentenzyme.codons[j]) << "  -  " << currentenzyme.decodons[j] << endl;
+            cout << "0b" << bitset<6>(currentenzyme.codons[j]) << " - " << currentenzyme.decodons[j] << endl;
         }
     }
     vector<char> readiedmarkers;
