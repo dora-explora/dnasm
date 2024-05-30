@@ -176,5 +176,7 @@ int main() {
     }
 
     delete[] codons;
-    delete[]
+    delete[] decodons;
+
+    return 0;
 }
