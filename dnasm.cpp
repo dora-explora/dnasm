@@ -12,10 +12,10 @@ using namespace std;
 
 class Enzyme {
     public:
-    vector<char> codons;
-    vector<string> decodons;
-    int length;
-    int cursor;
+    vector<char> codons; // all the codons
+    vector<string> decodons; // all the decodons
+    int length; // length of enzymes code, starts at 0 (for iterating)
+    int cursor; // cursor for where the enzyme is in the code
     int instrptr; // instruction pointer
 
     Enzyme(vector<char> incodons, vector<string> indecodons) {
@@ -26,8 +26,15 @@ class Enzyme {
         instrptr = 0;
     }
 
-    void run() {
-        decodons[instrptr] = 
+    int run() {
+        int offset = 0;
+        string current = decodons[instrptr];
+        if(current == "JmpCur") {
+            cursor = codons[instrptr + 1];
+            cout << bitset<6>(cursor);
+            offset++;
+        }
+        return offset;
     };
 };
 
