@@ -27,7 +27,7 @@ class Enzyme {
     }
 
     void run() {
-        
+        decodons[instrptr] = 
     }
 };
 
