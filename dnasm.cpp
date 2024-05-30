@@ -28,7 +28,7 @@ class Enzyme {
         instrptr = 0;
     }
 
-    int run() {
+    int step() {
         int offset = 0;
         string current = decodons[instrptr];
         if (current == "JmpCur") {
@@ -201,6 +201,8 @@ int main() {
             readiedmarkers.empty();
         }
     }
+     enzymes.at(markers[1)
+
 
     delete[] codons;
     delete[] decodons;
