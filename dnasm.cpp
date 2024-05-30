@@ -50,7 +50,7 @@ class Enzyme {
             cout << bitset<24>(instrptr) << endl;
             offset = 4;
         } else if (current == "Substi") {
-            
+            codons[instrptr]
         } else if (current == "") {
             
         } else if (current == "") {
