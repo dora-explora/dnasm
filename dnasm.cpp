@@ -54,9 +54,6 @@ class Enzyme {
     };
 };
 
-int runenz(char marker, map<Enzyme> enzymes) {
-    return enzymes.at(marker).run();
-}
 int main() {
     // read file
     ifstream file("DNAsm.bin", ios::binary | ios::in);
