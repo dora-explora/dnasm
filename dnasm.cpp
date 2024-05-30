@@ -174,4 +174,7 @@ int main() {
             readiedmarkers.empty();
         }
     }
+
+    delete[] codons;
+    delete[]
 }
