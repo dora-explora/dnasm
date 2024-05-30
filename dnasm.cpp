@@ -45,7 +45,7 @@ class Enzyme {
             instrptr |= codons[instrptr + 2] << 12;
             instrptr |= codons[instrptr + 3] << 6;
             instrptr |= codons[instrptr + 4];
-            cout << bitset<24>(cursor);
+            cout << bitset<24>(instrptr);
             offset = 4;
         } else if (current == "") {
             
