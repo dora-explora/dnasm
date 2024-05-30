@@ -26,9 +26,9 @@ class Enzyme {
         instrptr = 0;
     }
 
-    void run {
-        
-    }
+    int run {
+        return 0;
+    };
 };
 
 
