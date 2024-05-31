@@ -82,8 +82,8 @@ class Enzyme {
             offset = 1;
         } else if (current == "OutCur") {
             print(0b00111110);
-        } else if (current == "") {
-
+        } else if (current == "Insert") {
+            
         }
         instrptr += offset;
     };
