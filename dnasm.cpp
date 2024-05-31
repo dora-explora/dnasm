@@ -226,7 +226,7 @@ int main() {
     }
     cout << enzymes.at(markers[1]).step() << endl;
 
-
+    cout << ''
     delete[] codons;
     delete[] decodons;
 
