@@ -64,6 +64,8 @@ class Enzyme {
         } else if (current == "Output") {
             cout << (0b01000000 || codons[instrptr + 1]);
             offset = 1;
+        } else if (current == "Output") {
+            
         }
         return offset;
     };
