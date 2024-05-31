@@ -1,6 +1,6 @@
-Attach: Attach
-Begin Protein: BegPro
-End Protein: EndPro
-Detach: Detach
-Run Proteins: RunPro
-Ready: Ready 
+Attach: 'Attach'
+Begin Protein: 'BegPro'
+End Protein: 'EndPro'
+Detach: 'Detach'
+Run Proteins: 'RunPro'
+Ready: Ready '
