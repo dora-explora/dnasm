@@ -37,8 +37,10 @@ class Enzyme {
             if (input == 0b01101110) {
                 cout << endl; // for \n 
             }
-        } else if (input == 0b) {
-
+        } else if (input == 0b00111110) {
+            cout <<  ' ';
+        } else {
+            cout << (0b01000000 || input);
         }
     }
 
