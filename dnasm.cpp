@@ -20,7 +20,7 @@ class Enzyme {
     char subarg1; // first arg for substitution 
     char subarg2; // second arg for substitution 
     bool direction; // direction to travel in: true if forward, false if backward
-    bool backslash
+    bool backslash; // for printing
 
     Enzyme(vector<char> incodons, vector<string> indecodons) {
         codons = incodons;
@@ -29,6 +29,7 @@ class Enzyme {
         cursor = 0;
         instrptr = 0;
         direction = true;
+        backslash = false;
     }
 
     void print(char codon) {
