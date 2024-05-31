@@ -63,6 +63,7 @@ class Enzyme {
             direction = false;
         } else if (current == "Output") {
             cout << (0b01000000 || codons[instrptr + 1]);
+            offset = 1;
         }
         return offset;
     };
