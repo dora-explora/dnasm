@@ -19,6 +19,7 @@ class Enzyme {
     int instrptr; // instruction pointer
     char subarg1; // first arg for substitution 
     char subarg2; // second arg for substitution 
+    bool direction; // direction to travel in: true if forward, false if backward
 
     Enzyme(vector<char> incodons, vector<string> indecodons) {
         codons = incodons;
@@ -26,6 +27,7 @@ class Enzyme {
         length = incodons.size() - 1;
         cursor = 0;
         instrptr = 0;
+        direction = true;
     }
 
     int step() {
@@ -53,12 +55,12 @@ class Enzyme {
             subarg1 = codons[instrptr + 1];
             subarg2 = codons[instrptr + 2];
             offset = 2;
-        } else if (current == "") {
-            
-        } else if (current == "") {
-
-        } else if (current == "") {
-
+        } else if (current == "Advanc") {
+            if (direction) {cursor++;} else {cursor--;}
+        } else if (current == "SetFwd") {
+            direction = true;
+        } else if (current == "SetBwd") {
+            direction = false;
         } else if (current == "") {
 
         }
