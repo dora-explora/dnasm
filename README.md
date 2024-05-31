@@ -36,4 +36,4 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 100101      | Insert | 100101ab will insert b after a when a is seen. |
 | 011111      | Execute | Execute the codon at the cursor as an instruction. |
 
-**Note:** Comments and Outputs are ascii with a prefix of 0b01, with a codon of 111111 being replaced with space so all ascii letters from 01000001 to 01111111, 65 to 127.
+**Note:** Comments and Outputs are ascii with a prefix of 0b01, with a codon of 111111 being replaced with space. This is all ascii characters from 01000001 to 01111110, 65 to 127, as well as space.
