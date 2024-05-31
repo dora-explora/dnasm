@@ -20,6 +20,7 @@ class Enzyme {
     char subarg1; // first arg for substitution 
     char subarg2; // second arg for substitution 
     bool direction; // direction to travel in: true if forward, false if backward
+    bool backslash
 
     Enzyme(vector<char> incodons, vector<string> indecodons) {
         codons = incodons;
@@ -226,9 +227,6 @@ int main() {
     }
     cout << enzymes.at(markers[1]).step() << endl;
 
-    cout << 'text';
-    char backslash = \;
-    
     delete[] codons;
     delete[] decodons;
 
