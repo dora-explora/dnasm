@@ -31,7 +31,9 @@ class Enzyme {
     }
 
     void print(char codon) {
-        if 
+        if (codon == 0b00111110) {
+            cout << ' ';
+        }
     }
 
     int step() {
