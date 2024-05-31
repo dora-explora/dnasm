@@ -83,7 +83,9 @@ class Enzyme {
         } else if (current == "OutCur") {
             print(0b00111110);
         } else if (current == "Insert") {
-            
+            insarg1 = codons[instrptr + 1];
+            insarg2 = codons[instrptr + 2];
+            offset = 2;
         }
         instrptr += offset;
     };
