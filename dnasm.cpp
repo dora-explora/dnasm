@@ -19,6 +19,7 @@ class Enzyme {
     int instrptr; // instruction pointer
     char subarg1; // first arg for substitution 
     char subarg2; // second arg for substitution 
+    char insarg1
     bool direction; // direction to travel in: true if forward, false if backward
     bool backslash; // for printing
 
@@ -80,6 +81,8 @@ class Enzyme {
             offset = 1;
         } else if (current == "OutCur") {
             print(0b00111110);
+        } else if (current == "") {
+
         }
         instrptr += offset;
     };
