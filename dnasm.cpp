@@ -33,8 +33,8 @@ class Enzyme {
     }
 
     void print(char codon) {
-        if (codon == 0b00111110) {
-            cout << ' ';
+        if (backslash) {
+            
         }
     }
 
