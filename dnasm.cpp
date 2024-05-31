@@ -30,6 +30,10 @@ class Enzyme {
         direction = true;
     }
 
+    void print(char codon) {
+        if 
+    }
+
     int step() {
         int offset = 0;
         string current = decodons[instrptr];
@@ -65,7 +69,7 @@ class Enzyme {
             cout << (0b01000000 || codons[instrptr + 1]);
             offset = 1;
         } else if (current == "OutCur") {
-            
+
         }
         return offset;
     };
