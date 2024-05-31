@@ -79,7 +79,7 @@ class Enzyme {
             cout << (0b01000000 || codons[instrptr + 1]);
             offset = 1;
         } else if (current == "OutCur") {
-
+            print(0b00111110);
         }
         instrptr += offset;
     };
