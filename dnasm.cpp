@@ -35,8 +35,10 @@ class Enzyme {
     void print(char input) {
         if (backslash) {
             if (input == 0b01101110) {
-                cout << endl; 
+                cout << endl; // for \n 
             }
+        } else if (input == 0b) {
+
         }
     }
 
