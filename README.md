@@ -14,7 +14,7 @@ This language is written in codons of protein instructions next to codons of dat
 | 111111      | End translation program, where the ribosome attaches to data string. |
 | 110000      | Begin protein. |
 | 000011      | End protein. |
-| 101101      | Begin and end comment (comments are ascii with a prefix of 0b01, so all ascii letters from 01000000 to 01111111, 64 to 127). |
+| 101101      | Begin and end comment. |
 | 001100     | Run all readied proteins. The next 4 codons are the protein(s) initial cursor. |
 
 The codon after 110000 (Begin protein) is the proteins **marker**. This identifies the protein. If a marker is ever seen when the ribosome is attached but not writing to a protein, the corresponding protein will be *readied*. This means that when the next 001100 (Run) is translated by the ribosome, this protein and all other readied proteins will start executing at the initial pointer (next 4 codons).
@@ -35,3 +35,5 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 000101      | Output at Cursor | Outputs the value of the current location codon to the output strand (cout/stdout). |
 | 100101      | Insert | 100101ab will insert b after a when a is seen. |
 | 011111      | Execute | Execute the codon at the cursor as an instruction. |
+
+**Note:** 
