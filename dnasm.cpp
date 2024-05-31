@@ -61,7 +61,7 @@ class Enzyme {
             direction = true;
         } else if (current == "SetBwd") {
             direction = false;
-        } else if (current == "") {
+        } else if (current == "Output") {
 
         }
         return offset;
