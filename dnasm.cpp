@@ -19,7 +19,8 @@ class Enzyme {
     int instrptr; // instruction pointer
     char subarg1; // first arg for substitution 
     char subarg2; // second arg for substitution 
-    char insarg1
+    char insarg1; // first arg for insertion
+    char insarg2; // second arg for insertion
     bool direction; // direction to travel in: true if forward, false if backward
     bool backslash; // for printing
 
