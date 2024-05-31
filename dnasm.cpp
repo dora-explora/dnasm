@@ -32,9 +32,9 @@ class Enzyme {
         backslash = false;
     }
 
-    void print(char codon) {
+    void print(char input) {
         if (backslash) {
-
+            if (input == )
         }
     }
 
@@ -226,7 +226,7 @@ int main() {
             readiedmarkers.empty();
         }
     }
-    
+
     delete[] codons;
     delete[] decodons;
 
