@@ -8,4 +8,4 @@ Cursor Jump: 'JmpCur'
 Instrptr Jump: 'JmpIns'
 Substitution: 'Substi'
 Advance: 'Advanc'
-Set 
+Set Forward: 'SetFwd'
