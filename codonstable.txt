@@ -3,4 +3,6 @@ Begin Protein: 'BegPro'
 End Protein: 'EndPro'
 Detach: 'Detach'
 Run Proteins: 'RunPro'
-Ready: Ready '
+Ready: 'Ready '
+Cursor Jump: 'JmpCur'
+Instruction
