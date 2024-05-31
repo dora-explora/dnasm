@@ -38,7 +38,7 @@ class Enzyme {
         }
     }
 
-    int step() {
+    void step() {
         int offset = 0;
         string current = decodons[instrptr];
         if (codons[instrptr] == subarg1) {
@@ -73,9 +73,9 @@ class Enzyme {
             cout << (0b01000000 || codons[instrptr + 1]);
             offset = 1;
         } else if (current == "OutCur") {
-            
+
         }
-        return offset;
+        instrptr += offset;
     };
 };
 
@@ -226,8 +226,7 @@ int main() {
             readiedmarkers.empty();
         }
     }
-    cout << enzymes.at(markers[1]).step() << endl;
-
+    
     delete[] codons;
     delete[] decodons;
 
