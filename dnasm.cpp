@@ -226,7 +226,9 @@ int main() {
     }
     cout << enzymes.at(markers[1]).step() << endl;
 
-    cout << ''
+    cout << 'text';
+    char backslash = \;
+    
     delete[] codons;
     delete[] decodons;
 
