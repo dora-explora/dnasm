@@ -62,7 +62,7 @@ class Enzyme {
         } else if (current == "SetBwd") {
             direction = false;
         } else if (current == "Output") {
-            cout << 
+            cout << (0b01000000 || codons[instrptr + 1]);
         }
         return offset;
     };
