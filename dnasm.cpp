@@ -34,7 +34,7 @@ class Enzyme {
 
     void print(char codon) {
         if (backslash) {
-            
+
         }
     }
 
@@ -73,7 +73,7 @@ class Enzyme {
             cout << (0b01000000 || codons[instrptr + 1]);
             offset = 1;
         } else if (current == "OutCur") {
-
+            
         }
         return offset;
     };
