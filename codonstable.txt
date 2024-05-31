@@ -5,4 +5,5 @@ Detach: 'Detach'
 Run Proteins: 'RunPro'
 Ready: 'Ready '
 Cursor Jump: 'JmpCur'
-Instruction
+Instrptr Jump: 'JmpIns'
+Substitution: 'Substi'
