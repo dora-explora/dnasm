@@ -53,18 +53,18 @@ class Enzyme {
             codons[instrptr] = subarg2;
         } else if (current == "JmpCur") {
             cursor = 0;
-            cursor |= codons[instrptr + 1] << 18;
-            cursor |= codons[instrptr + 2] << 12;
-            cursor |= codons[instrptr + 3] << 6;
-            cursor |= codons[instrptr + 4];
+            cursor |= (codons[instrptr + 1] & 0x3F) << 18;
+            cursor |= (codons[instrptr + 2] & 0x3F) << 12;
+            cursor |= (codons[instrptr + 3] & 0x3F) << 6;
+            cursor |= (codons[instrptr + 4] & 0x3F);
             cout << bitset<24>(cursor) << endl;
             offset = 4;
         } else if (current == "JmpIns") {
             instrptr = 0;
-            instrptr |= codons[instrptr + 1] << 18;
-            instrptr |= codons[instrptr + 2] << 12;
-            instrptr |= codons[instrptr + 3] << 6;
-            instrptr |= codons[instrptr + 4];
+            instrptr |= (codons[instrptr + 1] & 0x3F) << 18;
+            instrptr |= (codons[instrptr + 2] & 0x3F) << 12;
+            instrptr |= (codons[instrptr + 3] & 0x3F) << 6;
+            instrptr |= (codons[instrptr + 4] & 0x3F);
             cout << bitset<24>(instrptr) << endl;
             offset = 4;
         } else if (current == "Substi") {
@@ -228,10 +228,10 @@ int main() {
         if (decodons[i] == "Ready") {
             readiedmarkers.push_back(codons[i]);
         } else if (decodons[i] == "RunPro") {
-            workingcursor |= codons[i+1] << 18;
-            workingcursor |= codons[i+2] << 12;
-            workingcursor |= codons[i+3] << 6;
-            workingcursor |= codons[i+4];
+            workingcursor |= (codons[i+1] & 0x3F) << 18;
+            workingcursor |= (codons[i+2] & 0x3F) << 12;
+            workingcursor |= (codons[i+3] & 0x3F) << 6;
+            workingcursor |= (codons[i+4] & 0x3F);
             for (int j = 0; j < readiedmarkers.size(); j++) {
                 enzymes.at(readiedmarkers[i]).cursor = workingcursor;
             }
