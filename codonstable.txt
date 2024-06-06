@@ -4,6 +4,7 @@ End Protein: 'EndPro'
 Detach: 'Detach'
 Run Proteins: 'RunPro'
 Ready: 'Ready '
+
 Cursor Jump: 'JmpCur'
 Instrptr Jump: 'JmpIns'
 Substitution: 'Substi'

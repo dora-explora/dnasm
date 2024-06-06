@@ -34,12 +34,13 @@ class Enzyme {
         backslash = false;
     }
 
-    void print(char input) {
+    void print(char rawinput) {
+        char input = (rawinput || 0b0100000);
         if (backslash) {
             if (input == 0b01101110) {
                 cout << endl; // for \n 
             }
-        } else if (input == 0b00111110) {
+        } else if (rawinput == 0b00111110) {
             cout <<  ' ';
         } else {
             cout << (0b01000000 || input);
@@ -47,7 +48,6 @@ class Enzyme {
     }
 
     void step() {
-        int offset = 0;
         string current = decodons[instrptr];
         if (codons[instrptr] == subarg1) {
             codons[instrptr] = subarg2;
@@ -58,7 +58,7 @@ class Enzyme {
             cursor |= codons[instrptr + 3] << 6;
             cursor |= codons[instrptr + 4];
             cout << bitset<24>(cursor) << endl;
-            offset = 4;
+            instrptr += 4;
         } else if (current == "JmpIns") {
             instrptr = 0;
             instrptr |= codons[instrptr + 1] << 18;
@@ -66,11 +66,11 @@ class Enzyme {
             instrptr |= codons[instrptr + 3] << 6;
             instrptr |= codons[instrptr + 4];
             cout << bitset<24>(instrptr) << endl;
-            offset = 4;
+            instrptr += 4;
         } else if (current == "Substi") {
             subarg1 = codons[instrptr + 1];
             subarg2 = codons[instrptr + 2];
-            offset = 2;
+            instrptr += 2;
         } else if (current == "Advanc") {
             if (direction) {cursor++;} else {cursor--;}
         } else if (current == "SetFwd") {
@@ -79,15 +79,14 @@ class Enzyme {
             direction = false;
         } else if (current == "Output") {
             print(codons[instrptr + 1]);
-            offset = 1;
+            instrptr += 1;
         } else if (current == "OutCur") {
             print(0b00111110);
         } else if (current == "Insert") {
             insarg1 = codons[instrptr + 1];
             insarg2 = codons[instrptr + 2];
-            offset = 2;
+            instrptr += 2;
         }
-        instrptr += offset;
     };
 };
 
@@ -119,7 +118,7 @@ int main() {
     string* decodons = new string[length];
     //  loop over codons and determine purpose
     for (int i = 0; i < length; i++) {
-        if (codons[i] == 0b000000) {
+        if (codons[i] == 0b111110) {
             attached = 1;
             decodons[i] = "Attach";
         } else if (codons[i] == 0b110000 && attached) {
@@ -130,7 +129,7 @@ int main() {
         } else if (codons[i] == 0b000011 && attached) {
             writing = 0;
             decodons[i] = "EndPro";
-        } else if (codons[i] == 0b111111 && attached) {
+        } else if (codons[i] == 0b011111 && attached) {
             attached = 0;
             decodons[i] = "Detach";
         } else if (attached && !writing && codons[i] == 0b001100) {
@@ -177,7 +176,7 @@ int main() {
             decodons[i+1] = "Arg 1 ";
             decodons[i+2] = "Arg 2 ";
             i += 2;
-        } else if (attached && writing && codons[i] == 0b011111) {
+        } else if (attached && writing && codons[i] == 0b011110) {
             decodons[i] = "Execut";
         } else {
             decodons[i] = "      ";

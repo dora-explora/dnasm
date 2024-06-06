@@ -10,8 +10,8 @@ This language is written in codons of protein instructions next to codons of dat
 
 | Instruction | Description |
 |-------------|-------------|
-| 000000      | Begin translation, where the ribosome attaches to data string. |
-| 111111      | End translation program, where the ribosome attaches to data string. |
+| 111110      | Begin translation, where the ribosome attaches to data string. |
+| 011111      | End translation program, where the ribosome attaches to data string. |
 | 110000      | Begin protein. |
 | 000011      | End protein. |
 | 101101      | Begin and end comment. |
@@ -34,6 +34,6 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 000100      | Output | 000100a will push a to the output strand (cout/stdout). |
 | 000101      | Output at Cursor | Outputs the value of the current location codon to the output strand (cout/stdout). |
 | 100101      | Insert | 100101ab will insert b after a when a is seen. |
-| 011111      | Execute | Execute the codon at the cursor as an instruction. |
+| 011110      | Execute | Execute the codon at the cursor as an instruction. |
 
 **Note:** Comments and Outputs are ascii with a prefix of 0b01, with a codon of 111111 being replaced with space. This is all ascii characters from 01000001 to 01111110, 65 to 127, as well as ' '.
