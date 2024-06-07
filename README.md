@@ -37,3 +37,8 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 011110      | Execute | Execute the codon at the cursor as an instruction. |
 
 **Note:** Comments and Outputs are ascii with a prefix of 0b01, with a codon of 111111 being replaced with space. This is all ascii characters from 01000001 to 01111110, 65 to 127, as well as ' '.
+
+## Details
+
+### Timing
+All processes in DNAsm happen in timesteps. Enzyme's operations execute in the order they were readied in
