@@ -86,6 +86,8 @@ class Enzyme {
             insarg1 = codons[instrptr + 1];
             insarg2 = codons[instrptr + 2];
             instrptr += 2;
+        } else {
+            instrptr++;
         }
     };
 };
@@ -178,6 +180,8 @@ int main() {
             i += 2;
         } else if (attached && writing && codons[i] == 0b011110) {
             decodons[i] = "Execut";
+        } else if (attached && writing && codons[i] == 0b000000) {
+            decodons[i] = "Blank ";
         } else {
             decodons[i] = "      ";
         }
