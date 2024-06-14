@@ -37,7 +37,7 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 011110      | Execute | Execute the codon at the cursor as an instruction. |
 | 000000      | Blank | Does absolutely nothing. |
 
-**Note:** Comments and Outputs are ascii with a prefix of 0b01, with a codon of 111111 being replaced with space. This is all ascii characters from 01000001 to 01111110, 65 to 127, as well as ' '.
+**Note:** Comments and Outputs are ascii with a prefix of 0b01, with a codon of 111111 being replaced with space. This is all ascii characters from 01000000 to 01111101, 64 to 126, as well as ' '.
 
 ## Details
 
