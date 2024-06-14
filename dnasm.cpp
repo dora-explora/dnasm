@@ -35,7 +35,7 @@ class Enzyme {
     }
 
     void print(char rawinput) {
-        char input = (rawinput || 0b0100000);
+        char input = (rawinput | 0b0100000);
         if (backslash) {
             if (input == 0b01101110) {
                 cout << endl; // for \n 
