@@ -11,7 +11,7 @@ This language is written in codons of protein instructions next to codons of dat
 | Instruction | Description |
 |-------------|-------------|
 | 111110      | Begin translation, where the ribosome attaches to data string. |
-| 011110      | Ribosome jumps to abcd (the 4 codons after the instruction) and disattaches. |
+| 011110      | Ribosome jumps where specified and disattaches. The 4 codons after the instruction determing this. |
 | 011111      | End translation program, where the ribosome attaches to data string. |
 | 110000      | Begin protein. |
 | 000011      | End protein. |
@@ -57,3 +57,5 @@ The ribosome will step along every instruction in the program, but will only do 
 Every time the ribosome passes an instruction, time will step. Because of this, the ribosome always executes last. At the start of the program, the ribosome will execute until it deploys an enzyme. After that, enzymes will execute in the order they were written until the ribosome steps/executes, and then time steps again.
 
 When an enzymes turn comes up, they will read, execute, and finish the instruction before the order moves on to the next object.
+
+**Note:** The ribosome will deploy enzymes when it reads the deploy *instruction*, not when it reads the 4 codons after it.

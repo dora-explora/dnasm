@@ -13,8 +13,8 @@ using namespace std;
 
 class Enzyme {
     public:
-    vector<char> codons; // all the codons
-    vector<string> decodons; // all the decodons
+    vector<char> codons; // all the enzymes codons
+    vector<string> decodons; // all the enzymes decodons
     int length; // length of enzymes code, starts at 0 (for iterating)
     int cursor; // cursor for where the enzyme is in the code
     int instrptr; // instruction pointer
@@ -93,177 +93,165 @@ class Enzyme {
     };
 };
 
-class Ribosome {
-    public:
-    char workingmarker;
-    vector<char> workingcodons;
-    vector<string> workingdecodons;
+string* decodons; // all decodons in strings (human readable and properly identified)
+char* codons; // all codons in chars (single bytes)
+int length; // length of file in bytes (codons)
 
-    Ribosome() {
-        
+
+void display() {
+    cout << "Codons/Decodons: " << endl;
+    for (int i = 0; i < length; i++) {
+        cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
     }
-};
+}
 
-tuple<char*, string*> prepare(int length, bool attached, bool writing) {
-        // read file
-        ifstream file("DNAsm.bin", ios::binary | ios::in);
-        // open file as array of bytes
-        char* codons;
-        if (file.is_open()) {
-            file.seekg(0, file.end);
-            length = file.tellg();
-            file.seekg(0, file.beg);
-            codons = new char[length];
-            file.read(codons, length);
-            file.close();
+void prepare() {
+    length = 0;
+    bool attached = false;
+    bool writing = false;
+    // read file
+    ifstream file("DNAsm.bin", ios::binary | ios::in);
+    // open file as array of bytes
+    char* codons;
+    if (file.is_open()) {
+        file.seekg(0, file.end);
+        length = file.tellg();
+        file.seekg(0, file.beg);
+        codons = new char[length];
+        file.read(codons, length);
+        file.close();
+    } else {
+        cout << "Error: Unable to open file" << endl;
+    }
+    // print file contents as binary (for debugging)
+    // for (int i = 0; i < length; i++) {
+    //     cout << bitset<8>(codons[i]) << "/";
+    // }
+    // cout << endl;
+
+    // determine purpose of each codon in (codon, six character string) pairs
+    decodons = new string[length];
+    // loop over codons and determine purpose
+    for (int i = 0; i < length; i++) {
+        if (codons[i] == 0b111110) {
+            attached = 1;
+            decodons[i] = "Attach";
+        } else if (codons[i] == 0b110000 && attached) {
+            writing = 1;
+            decodons[i] = "BegPro";
+            decodons[i+1] = "Marker";
+            i++;
+        } else if (codons[i] == 0b000011 && attached) {
+            writing = 0;
+            decodons[i] = "EndPro";
+        } else if (codons[i] == 0b011111 && attached) {
+            attached = 0;
+            decodons[i] = "Detach";
+        } else if (codons[i] == 0b111111 && attached) {
+            // put this in here when time is figured out 
+            decodons[i] = "RibJmp";
+        } else if (attached && !writing && codons[i] == 0b001100) {
+            decodons[i] = "RunPro";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            decodons[i+3] = "Arg 3 ";
+            decodons[i+4] = "Arg 4 ";
+            i += 4;
+        } else if (attached && !writing) {
+            decodons[i] = "Ready ";
+        } else if (attached && writing && codons[i] == 0b001111) {
+            decodons[i] = "JmpCur";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            decodons[i+3] = "Arg 3 ";
+            decodons[i+4] = "Arg 4 ";
+            i += 4;
+        } else if (attached && writing && codons[i] == 0b111100) {
+            decodons[i] = "JmpIns";
+        } else if (attached && writing && codons[i] == 0b110011) {
+            decodons[i] = "Substi";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            i += 2;
+        } else if (attached && writing && codons[i] == 0b111000) {
+            decodons[i] = "Advanc";
+        } else if (attached && writing && codons[i] == 0b100100) {
+            decodons[i] = "SetFwd";
+            decodons[i+1] = "Arg 1 ";
+            i++;
+        } else if (attached && writing && codons[i] == 0b011011) {
+            decodons[i] = "SetBwd";
+            decodons[i+1] = "Arg 1 ";
+            i++;
+        } else if (attached && writing && codons[i] == 0b000100) {
+            decodons[i] = "Output";
+            decodons[i+1] = "Arg 1 ";
+            i++;
+        } else if (attached && writing && codons[i] == 0b000101) {
+            decodons[i] = "OutCur";
+        } else if (attached && writing && codons[i] == 0b100101) {
+            decodons[i] = "Insert";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            i += 2;
+        } else if (attached && writing && codons[i] == 0b111111) {
+            decodons[i] = "Execut";
+        } else if (attached && writing && codons[i] == 0b000000) {
+            decodons[i] = "Blank ";
         } else {
-            cout << "Error: Unable to open file" << endl;
+            decodons[i] = "      ";
         }
-        // print file contents as binary (for debugging)
-        // for (int i = 0; i < length; i++) {
-        //     cout << bitset<8>(codons[i]) << "/";
-        // }
-        // cout << endl;
-
-        // determine purpose of each codon in (codon, six character string) pairs
-        string* decodons = new string[length];
-        // loop over codons and determine purpose
-        for (int i = 0; i < length; i++) {
-            if (codons[i] == 0b111110) {
-                attached = 1;
-                decodons[i] = "Attach";
-            } else if (codons[i] == 0b110000 && attached) {
-                writing = 1;
-                decodons[i] = "BegPro";
-                decodons[i+1] = "Marker";
-                i++;
-            } else if (codons[i] == 0b000011 && attached) {
-                writing = 0;
-                decodons[i] = "EndPro";
-            } else if (codons[i] == 0b011111 && attached) {
-                attached = 0;
-                decodons[i] = "Detach";
-            } else if (codons[i] == 0b111111 && attached) {
-                // put this in here when time is figured out 
-                decodons[i] = "RibJmp";
-            } else if (attached && !writing && codons[i] == 0b001100) {
-                decodons[i] = "RunPro";
-                decodons[i+1] = "Arg 1 ";
-                decodons[i+2] = "Arg 2 ";
-                decodons[i+3] = "Arg 3 ";
-                decodons[i+4] = "Arg 4 ";
-                i += 4;
-            } else if (attached && !writing) {
-                decodons[i] = "Ready ";
-            } else if (attached && writing && codons[i] == 0b001111) {
-                decodons[i] = "JmpCur";
-                decodons[i+1] = "Arg 1 ";
-                decodons[i+2] = "Arg 2 ";
-                decodons[i+3] = "Arg 3 ";
-                decodons[i+4] = "Arg 4 ";
-                i += 4;
-            } else if (attached && writing && codons[i] == 0b111100) {
-                decodons[i] = "JmpIns";
-            } else if (attached && writing && codons[i] == 0b110011) {
-                decodons[i] = "Substi";
-                decodons[i+1] = "Arg 1 ";
-                decodons[i+2] = "Arg 2 ";
-                i += 2;
-            } else if (attached && writing && codons[i] == 0b111000) {
-                decodons[i] = "Advanc";
-            } else if (attached && writing && codons[i] == 0b100100) {
-                decodons[i] = "SetFwd";
-                decodons[i+1] = "Arg 1 ";
-                i++;
-            } else if (attached && writing && codons[i] == 0b011011) {
-                decodons[i] = "SetBwd";
-                decodons[i+1] = "Arg 1 ";
-                i++;
-            } else if (attached && writing && codons[i] == 0b000100) {
-                decodons[i] = "Output";
-                decodons[i+1] = "Arg 1 ";
-                i++;
-            } else if (attached && writing && codons[i] == 0b000101) {
-                decodons[i] = "OutCur";
-            } else if (attached && writing && codons[i] == 0b100101) {
-                decodons[i] = "Insert";
-                decodons[i+1] = "Arg 1 ";
-                decodons[i+2] = "Arg 2 ";
-                i += 2;
-            } else if (attached && writing && codons[i] == 0b111111) {
-                decodons[i] = "Execut";
-            } else if (attached && writing && codons[i] == 0b000000) {
-                decodons[i] = "Blank ";
-            } else {
-                decodons[i] = "      ";
-            }
-        }
-        cout << "Codons/Decodons: " << endl;
-        for (int i = 0; i < length; i++) {
-            cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
-        }
-        return make_tuple(codons, decodons);
+    }
+    cout << "Codons/Decodons: " << endl;
+    for (int i = 0; i < length; i++) {
+        cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
+    }
     }
 
 int main() {
-    int length = 0;
-    bool attached = 0;
-    bool writing = 0;
-    tuple<char*, string*> prepare_output = prepare(length, attached, writing);
-    char* codons = get<0>(prepare_output);
-    string* decodons = get<1>(prepare_output);
-    char workingmarker;
-    vector<char> workingcodons;
-    vector<char> markers;
-    vector<string> workingdecodons;
-    map<char, Enzyme> enzymes;
-    for (int i = 0; i < length; i++) {
-        if (decodons[i] == "BegPro") {
-            writing = 1;
-            i++;
-            markers.push_back(codons[i]);
-            workingmarker = codons[i];
-            i++;
-            for (i = i; writing; i++) {
-                if (decodons[i] == "EndPro") {
-                    writing = false;
-                } else {
-                    workingcodons.push_back(codons[i]);
-                    workingdecodons.push_back(decodons[i]);
-                }
-                // add all the codons to working codons/decodons and make an enzyme out of it
-            }
-            enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
-            workingcodons.clear();
-            workingdecodons.clear();
-            i--;
-        }
-    }
-    for (int i = 0; i < markers.size(); i++) {
-        Enzyme currentenzyme = enzymes.at(markers[i]);
-        cout << "\nEnzyme " << i << " with marker " << bitset<6>(markers[i]) << endl;
-        for (int j = 0; j <= currentenzyme.length; j++) {
-            cout << "0b" << bitset<6>(currentenzyme.codons[j]) << " - " << currentenzyme.decodons[j] << endl;
-        }
-    }
-    vector<char> readiedmarkers;
-    int workingcursor = 0;
-    // loop for readying and running proteins
-    for (int i = 0; i < length; i++) {
-        if (decodons[i] == "Ready") {
-            readiedmarkers.push_back(codons[i]);
-        } else if (decodons[i] == "RunPro") {
-            workingcursor |= (codons[i+1] & 0x3F) << 18;
-            workingcursor |= (codons[i+2] & 0x3F) << 12;
-            workingcursor |= (codons[i+3] & 0x3F) << 6;
-            workingcursor |= (codons[i+4] & 0x3F);
-            for (int j = 0; j < readiedmarkers.size(); j++) {
-                enzymes.at(readiedmarkers[i]).cursor = workingcursor;
-            }
-            readiedmarkers.empty();
-        }
-    }
+    int time = 0;
+    bool finished = false;
 
+    prepare();
+    
+    vector<char> markers; // all markers in order of when their enzymes were written
+    char recentmarker; // marker of the enzyme that was most recently run
+    char workingmarker; // marker of the enzyme currently being transcribed
+    map<char, Enzyme> enzymes; // all enzymes and their markers
+    bool attached = false; // true if ribosome is currently attached
+    bool writing = false; // true if ribosome is currently writing
+    int ribcursor = 0; // ribosomes position/cursor
+    string ribcurrent; // decodon at ribosomes cursor
+    vector<char> workingcodons; // codons of ribosomes working enzyme
+    vector<string> workingdecodons; // decodons of ribosomes working enzyme
+    int cooldown = 0; // cooldown, used for when ribosome has to read bytes for timing but doesn't need to actually do anything with them
+    // main loop!
+    while (!finished && time != -2147483647 && ribcursor != (length+1)) {
+        // execute all enzymes
+        for (char recentmarker : markers) {
+            // enzymes.at(recentmarker).step(); // not yet
+        }
+        // then execute the ribosomes stuff
+        ribcurrent = decodons[ribcursor];
+        if (cooldown != 0) {
+            cooldown--;
+            ribcursor++;
+        } else if (attached && !writing && ribcurrent == "Detach") {
+            attached = false;
+            ribcursor++;
+        } else if (attached && writing && ribcurrent == "EndPro") {
+            writing = false;
+            ribcursor++;
+        } else if (attached && !writing && ribcurrent == "BegPro") {
+            writing = true;
+            workingmarker = codons[ribcursor+1];
+            cooldown = 1;
+            ribcursor++;
+        }
+        display();
+        cout << "Time: " << time << endl;
+        time++; 
+    }
     delete[] codons;
     delete[] decodons;
 

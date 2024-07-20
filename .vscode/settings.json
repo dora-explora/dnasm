@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "*.rs": "rust",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "iosfwd": "cpp"
     },
     "dimmer.enabled": false,
     "C_Cpp.errorSquiggles": "disabled"
