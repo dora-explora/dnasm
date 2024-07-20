@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <bitset>
+#include <tuple>
 
 using namespace std;
 
@@ -92,104 +93,125 @@ class Enzyme {
     };
 };
 
-int main() {
-    // read file
-    ifstream file("DNAsm.bin", ios::binary | ios::in);
-    char* codons;
-    int length;
-    // open file as array of bytes
-    if (file.is_open()) {
-        file.seekg(0, file.end);
-        length = file.tellg();
-        file.seekg(0, file.beg);
-        codons = new char[length];
-        file.read(codons, length);
-        file.close();
-    } else {
-        cout << "Error: Unable to open file" << endl;
-    }
-    // print file contents as binary (for debugging)
-    // for (int i = 0; i < length; i++) {
-    //     cout << bitset<8>(codons[i]) << "/";
-    // }
-    // cout << endl;
+class Ribosome {
+    public:
+    char workingmarker;
+    vector<char> workingcodons;
+    vector<string> workingdecodons;
 
-    // determine purpose of each codon in (codon, six character string) pairs
+    Ribosome() {
+        
+    }
+};
+
+tuple<char*, string*> prepare(int length, bool attached, bool writing) {
+        // read file
+        ifstream file("DNAsm.bin", ios::binary | ios::in);
+        // open file as array of bytes
+        char* codons;
+        if (file.is_open()) {
+            file.seekg(0, file.end);
+            length = file.tellg();
+            file.seekg(0, file.beg);
+            codons = new char[length];
+            file.read(codons, length);
+            file.close();
+        } else {
+            cout << "Error: Unable to open file" << endl;
+        }
+        // print file contents as binary (for debugging)
+        // for (int i = 0; i < length; i++) {
+        //     cout << bitset<8>(codons[i]) << "/";
+        // }
+        // cout << endl;
+
+        // determine purpose of each codon in (codon, six character string) pairs
+        string* decodons = new string[length];
+        // loop over codons and determine purpose
+        for (int i = 0; i < length; i++) {
+            if (codons[i] == 0b111110) {
+                attached = 1;
+                decodons[i] = "Attach";
+            } else if (codons[i] == 0b110000 && attached) {
+                writing = 1;
+                decodons[i] = "BegPro";
+                decodons[i+1] = "Marker";
+                i++;
+            } else if (codons[i] == 0b000011 && attached) {
+                writing = 0;
+                decodons[i] = "EndPro";
+            } else if (codons[i] == 0b011111 && attached) {
+                attached = 0;
+                decodons[i] = "Detach";
+            } else if (codons[i] == 0b111111 && attached) {
+                // put this in here when time is figured out 
+                decodons[i] = "RibJmp";
+            } else if (attached && !writing && codons[i] == 0b001100) {
+                decodons[i] = "RunPro";
+                decodons[i+1] = "Arg 1 ";
+                decodons[i+2] = "Arg 2 ";
+                decodons[i+3] = "Arg 3 ";
+                decodons[i+4] = "Arg 4 ";
+                i += 4;
+            } else if (attached && !writing) {
+                decodons[i] = "Ready ";
+            } else if (attached && writing && codons[i] == 0b001111) {
+                decodons[i] = "JmpCur";
+                decodons[i+1] = "Arg 1 ";
+                decodons[i+2] = "Arg 2 ";
+                decodons[i+3] = "Arg 3 ";
+                decodons[i+4] = "Arg 4 ";
+                i += 4;
+            } else if (attached && writing && codons[i] == 0b111100) {
+                decodons[i] = "JmpIns";
+            } else if (attached && writing && codons[i] == 0b110011) {
+                decodons[i] = "Substi";
+                decodons[i+1] = "Arg 1 ";
+                decodons[i+2] = "Arg 2 ";
+                i += 2;
+            } else if (attached && writing && codons[i] == 0b111000) {
+                decodons[i] = "Advanc";
+            } else if (attached && writing && codons[i] == 0b100100) {
+                decodons[i] = "SetFwd";
+                decodons[i+1] = "Arg 1 ";
+                i++;
+            } else if (attached && writing && codons[i] == 0b011011) {
+                decodons[i] = "SetBwd";
+                decodons[i+1] = "Arg 1 ";
+                i++;
+            } else if (attached && writing && codons[i] == 0b000100) {
+                decodons[i] = "Output";
+                decodons[i+1] = "Arg 1 ";
+                i++;
+            } else if (attached && writing && codons[i] == 0b000101) {
+                decodons[i] = "OutCur";
+            } else if (attached && writing && codons[i] == 0b100101) {
+                decodons[i] = "Insert";
+                decodons[i+1] = "Arg 1 ";
+                decodons[i+2] = "Arg 2 ";
+                i += 2;
+            } else if (attached && writing && codons[i] == 0b111111) {
+                decodons[i] = "Execut";
+            } else if (attached && writing && codons[i] == 0b000000) {
+                decodons[i] = "Blank ";
+            } else {
+                decodons[i] = "      ";
+            }
+        }
+        cout << "Codons/Decodons: " << endl;
+        for (int i = 0; i < length; i++) {
+            cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
+        }
+        return make_tuple(codons, decodons);
+    }
+
+int main() {
+    int length = 0;
     bool attached = 0;
     bool writing = 0;
-    string* decodons = new string[length];
-    //  loop over codons and determine purpose
-    for (int i = 0; i < length; i++) {
-        if (codons[i] == 0b111110) {
-            attached = 1;
-            decodons[i] = "Attach";
-        } else if (codons[i] == 0b110000 && attached) {
-            writing = 1;
-            decodons[i] = "BegPro";
-            decodons[i+1] = "Marker";
-            i++;
-        } else if (codons[i] == 0b000011 && attached) {
-            writing = 0;
-            decodons[i] = "EndPro";
-        } else if (codons[i] == 0b011111 && attached) {
-            attached = 0;
-            decodons[i] = "Detach";
-        } else if (attached && !writing && codons[i] == 0b001100) {
-            decodons[i] = "RunPro";
-            decodons[i+1] = "Arg 1 ";
-            decodons[i+2] = "Arg 2 ";
-            decodons[i+3] = "Arg 3 ";
-            decodons[i+4] = "Arg 4 ";
-            i += 4;
-        } else if (attached && !writing) {
-            decodons[i] = "Ready ";
-        } else if (attached && writing && codons[i] == 0b001111) {
-            decodons[i] = "JmpCur";
-            decodons[i+1] = "Arg 1 ";
-            decodons[i+2] = "Arg 2 ";
-            decodons[i+3] = "Arg 3 ";
-            decodons[i+4] = "Arg 4 ";
-            i += 4;
-        } else if (attached && writing && codons[i] == 0b111100) {
-            decodons[i] = "JmpIns";
-        } else if (attached && writing && codons[i] == 0b110011) {
-            decodons[i] = "Substi";
-            decodons[i+1] = "Arg 1 ";
-            decodons[i+2] = "Arg 2 ";
-            i += 2;
-        } else if (attached && writing && codons[i] == 0b111000) {
-            decodons[i] = "Advanc";
-        } else if (attached && writing && codons[i] == 0b100100) {
-            decodons[i] = "SetFwd";
-            decodons[i+1] = "Arg 1 ";
-            i++;
-        } else if (attached && writing && codons[i] == 0b011011) {
-            decodons[i] = "SetBwd";
-            decodons[i+1] = "Arg 1 ";
-            i++;
-        } else if (attached && writing && codons[i] == 0b000100) {
-            decodons[i] = "Output";
-            decodons[i+1] = "Arg 1 ";
-            i++;
-        } else if (attached && writing && codons[i] == 0b000101) {
-            decodons[i] = "OutCur";
-        } else if (attached && writing && codons[i] == 0b100101) {
-            decodons[i] = "Insert";
-            decodons[i+1] = "Arg 1 ";
-            decodons[i+2] = "Arg 2 ";
-            i += 2;
-        } else if (attached && writing && codons[i] == 0b111111) {
-            decodons[i] = "Execut";
-        } else if (attached && writing && codons[i] == 0b000000) {
-            decodons[i] = "Blank ";
-        } else {
-            decodons[i] = "      ";
-        }
-    }
-    cout << "Codons/Decodons: " << endl;
-    for (int i = 0; i < length; i++) {
-        cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
-    }
+    tuple<char*, string*> prepare_output = prepare(length, attached, writing);
+    char* codons = get<0>(prepare_output);
+    string* decodons = get<1>(prepare_output);
     char workingmarker;
     vector<char> workingcodons;
     vector<char> markers;
