@@ -178,7 +178,7 @@ int main() {
             decodons[i+1] = "Arg 1 ";
             decodons[i+2] = "Arg 2 ";
             i += 2;
-        } else if (attached && writing && codons[i] == 0b111111) {
+        } else if (attached && writing && codons[i] == 0b011110) {
             decodons[i] = "Execut";
         } else if (attached && writing && codons[i] == 0b000000) {
             decodons[i] = "Blank ";
