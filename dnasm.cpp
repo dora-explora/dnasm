@@ -105,14 +105,11 @@ void display() {
     }
 }
 
-void prepare() {
+void open(string filename) {
     length = 0;
-    bool attached = false;
-    bool writing = false;
     // read file
-    ifstream file("DNAsm.bin", ios::binary | ios::in);
+    ifstream file(filename, ios::binary | ios::in);
     // open file as array of bytes
-    char* codons;
     if (file.is_open()) {
         file.seekg(0, file.end);
         length = file.tellg();
@@ -123,12 +120,11 @@ void prepare() {
     } else {
         cout << "Error: Unable to open file" << endl;
     }
-    // print file contents as binary (for debugging)
-    // for (int i = 0; i < length; i++) {
-    //     cout << bitset<8>(codons[i]) << "/";
-    // }
-    // cout << endl;
+}
 
+void decode() {
+    bool attached = false;
+    bool writing = false;
     // determine purpose of each codon in (codon, six character string) pairs
     decodons = new string[length];
     // loop over codons and determine purpose
@@ -202,18 +198,16 @@ void prepare() {
             decodons[i] = "      ";
         }
     }
-    cout << "Codons/Decodons: " << endl;
-    for (int i = 0; i < length; i++) {
-        cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
-    }
-    }
+}
 
 int main() {
     int time = 0;
     bool finished = false;
 
-    prepare();
-    
+    open("DNAsm.bin");
+    decode();
+    display();
+
     vector<char> markers; // all markers in order of when their enzymes were written
     char recentmarker; // marker of the enzyme that was most recently run
     char workingmarker; // marker of the enzyme currently being transcribed
@@ -226,10 +220,11 @@ int main() {
     vector<string> workingdecodons; // decodons of ribosomes working enzyme
     int cooldown = 0; // cooldown, used for when ribosome has to read bytes for timing but doesn't need to actually do anything with them
     // main loop!
-    while (!finished && time != -2147483647 && ribcursor != (length+1)) {
+    while (!finished && time != -2147483647 && ribcursor != (length)) {
         // execute all enzymes
         for (char recentmarker : markers) {
             // enzymes.at(recentmarker).step(); // not yet
+            // decode();
         }
         // then execute the ribosomes stuff
         ribcurrent = decodons[ribcursor];
@@ -247,10 +242,9 @@ int main() {
             workingmarker = codons[ribcursor+1];
             cooldown = 1;
             ribcursor++;
+        } else if ( !writing) {
+            ribcursor++;
         }
-        display();
-        cout << "Time: " << time << endl;
-        time++; 
     }
     delete[] codons;
     delete[] decodons;
