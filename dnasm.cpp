@@ -104,7 +104,7 @@ void print() {
 }
 
 void print_enzymes(vector<char> markers, map<char, Enzyme> enzymes) {
-    if (markers.size() > 0) {
+    if (!markers.empty()) {
          for (int i = 0; i < (markers.size()); i++) {
              cout << "\nEnzyme #" << i << " with marker 0b" << bitset<6>(markers[i]) << endl;
              for (int j = 0; j < enzymes.at(markers[i]).decodons.size(); j++) {
