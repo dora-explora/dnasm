@@ -11,6 +11,10 @@
 
 using namespace std;
 
+string* decodons; // all decodons in strings (human readable and properly identified)
+char* codons; // all codons in chars (single bytes)
+int length; // length of file in bytes (codons)
+
 class Enzyme {
     public:
     vector<char> codons; // all the enzymes codons
@@ -20,8 +24,6 @@ class Enzyme {
     int instrptr; // instruction pointer
     char subarg1; // first arg for substitution 
     char subarg2; // second arg for substitution 
-    char insarg1; // first arg for insertion
-    char insarg2; // second arg for insertion
     bool direction; // direction to travel in: true if forward, false if backward
     bool backslash; // for printing
 
@@ -48,62 +50,58 @@ class Enzyme {
         }
     }
 
-    void step() {
+    char* step(char* globalcodons) {
         string current = decodons[instrptr];
-        if (codons[instrptr] == subarg1) {
-            codons[instrptr] = subarg2;
-        } else if (current == "JmpCur") {
+        if (globalcodons[cursor] == subarg1) {
+            globalcodons[cursor] = subarg2;
+        }
+        if (current == "JmpCur") {
             cursor = 0;
             cursor |= (codons[instrptr + 1] & 0x3F) << 18;
             cursor |= (codons[instrptr + 2] & 0x3F) << 12;
             cursor |= (codons[instrptr + 3] & 0x3F) << 6;
             cursor |= (codons[instrptr + 4] & 0x3F);
-            cout << bitset<24>(cursor) << endl;
-            instrptr += 4;
-        } else if (current == "JmpIns") {
+            cout << "Cursor: " << bitset<24>(cursor) << endl;
+            instrptr += 5;
+        } else if (current == "InsJmp") {
+            int tempinstrptr = instrptr;
             instrptr = 0;
-            instrptr |= (codons[instrptr + 1] & 0x3F) << 18;
-            instrptr |= (codons[instrptr + 2] & 0x3F) << 12;
-            instrptr |= (codons[instrptr + 3] & 0x3F) << 6;
-            instrptr |= (codons[instrptr + 4] & 0x3F);
-            cout << bitset<24>(instrptr) << endl;
-            instrptr += 4;
+            instrptr |= (codons[tempinstrptr + 1] & 0x3F) << 18;
+            instrptr |= (codons[tempinstrptr + 2] & 0x3F) << 12;
+            instrptr |= (codons[tempinstrptr + 3] & 0x3F) << 6;
+            instrptr |= (codons[tempinstrptr + 4] & 0x3F);
+            cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
         } else if (current == "Substi") {
             subarg1 = codons[instrptr + 1];
             subarg2 = codons[instrptr + 2];
-            instrptr += 2;
+            instrptr += 3;
         } else if (current == "StpFwd") {
             cursor++;
+            instrptr++;
         } else if (current == "StpBwd") {
             cursor--;
+            instrptr++;
         } else if (current == "Output") {
             print(codons[instrptr + 1]);
-            instrptr += 1;
-        } else if (current == "OutCur") {
-            print(0b00111110);
-        } else if (current == "Insert") {
-            insarg1 = codons[instrptr + 1];
-            insarg2 = codons[instrptr + 2];
             instrptr += 2;
+        } else if (current == "OutCur") {
+            // yeahhhhhhhhh i need to figure this out
+            instrptr++;
         } else {
             instrptr++;
         }
+        return globalcodons;
     };
 };
 
-string* decodons; // all decodons in strings (human readable and properly identified)
-char* codons; // all codons in chars (single bytes)
-int length; // length of file in bytes (codons)
-
-
-void print() {
+void display() {
     cout << "Codons/Decodons: " << endl;
     for (int i = 0; i < length; i++) {
         cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
     }
 }
 
-void print_enzymes(vector<char> markers, map<char, Enzyme> enzymes) {
+void display_enzymes(vector<char> markers, map<char, Enzyme> enzymes) {
     if (!markers.empty()) {
          for (int i = 0; i < (markers.size()); i++) {
              cout << "\nEnzyme #" << i << " with marker 0b" << bitset<6>(markers[i]) << endl;
@@ -179,7 +177,12 @@ void decode() {
             decodons[i+4] = "Arg 4 ";
             i += 4;
         } else if (attached && writing && codons[i] == 0b111100) {
-            decodons[i] = "JmpIns";
+            decodons[i] = "InsJmp";
+            decodons[i+1] = "Arg 1 ";
+            decodons[i+2] = "Arg 2 ";
+            decodons[i+3] = "Arg 3 ";
+            decodons[i+4] = "Arg 4 ";
+            i += 4;
         } else if (attached && writing && codons[i] == 0b110011) {
             decodons[i] = "Substi";
             decodons[i+1] = "Arg 1 ";
@@ -195,15 +198,10 @@ void decode() {
             i++;
         } else if (attached && writing && codons[i] == 0b000101) {
             decodons[i] = "OutCur";
-        } else if (attached && writing && codons[i] == 0b100101) {
-            decodons[i] = "Insert";
-            decodons[i+1] = "Arg 1 ";
-            decodons[i+2] = "Arg 2 ";
-            i += 2;
         } else if (attached && writing && codons[i] == 0b111111) {
             decodons[i] = "Execut";
         } else if (attached && writing && codons[i] == 0b000000) {
-            decodons[i] = "Blank ";
+            decodons[i] = "Data  ";
         } else {
             decodons[i] = "      ";
         }
@@ -221,7 +219,9 @@ int main() {
     open(filename);
     decode();
 
-    vector<char> markers; // all markers in order of when their enzymes were written
+    vector<char> markers; // all markers in order of when their enzymes were written, readied, running, or not.
+    vector<char> readiedmarkers; // markers of all readied enzymes
+    vector<char> runningmarkers; // markers of all running enzymes
     char recentmarker; // marker of the enzyme that was most recently run
     char workingmarker; // marker of the enzyme currently being transcribed
     map<char, Enzyme> enzymes; // all enzymes and their markers
@@ -232,13 +232,14 @@ int main() {
     vector<char> workingcodons; // codons of ribosomes working enzyme
     vector<string> workingdecodons; // decodons of ribosomes working enzyme
     int cooldown = 0; // cooldown, used for when ribosome has to read bytes for timing but doesn't need to actually do anything with them
+    int initialcursor; // where readied enzymes are deployed to at first 
     string nothing;
     // main loop!
     while (!finished && time != -2147483647 && ribcursor != (length)) {
         // execute all enzymes
-        for (char recentmarker : markers) {
-            // enzymes.at(recentmarker).step(); // not yet
-            // decode();
+        for (char recentmarker : runningmarkers) {
+            codons = enzymes.at(recentmarker).step(codons);
+            decode();
         }
         // then execute the ribosomes stuff
         ribcurrent = decodons[ribcursor];
@@ -264,6 +265,21 @@ int main() {
             workingmarker = codons[ribcursor+1];
             cooldown = 1;
             ribcursor++;
+        } else if (attached && !writing && ribcurrent == "Ready ") {
+            readiedmarkers.push_back(codons[ribcursor]);
+            ribcursor++;
+        } else if (attached && !writing && ribcurrent == "RunPro") {
+            for (int i = 0; i < readiedmarkers.size(); i++) { 
+                runningmarkers.push_back(readiedmarkers[i]); 
+                initialcursor = 0;
+                initialcursor |= (codons[ribcursor+1] & 0x3F) << 18;
+                initialcursor |= (codons[ribcursor+2] & 0x3F) << 12;
+                initialcursor |= (codons[ribcursor+3] & 0x3F) << 6;
+                initialcursor |= (codons[ribcursor+4] & 0x3F);
+                enzymes.at(readiedmarkers[i]).cursor = initialcursor;
+            };
+            readiedmarkers.clear();
+            ribcursor++;
         } else if (attached && !writing && ribcurrent == "RibJmp") {
             ribcursor = 0;
             ribcursor |= (codons[ribcursor+1] & 0x3F) << 18;
@@ -280,9 +296,12 @@ int main() {
             ribcursor++;
         }
         cout << "ribosomes cursor: " << ribcursor << endl;
+        display();
+        // cin >> nothing; // just so time can be stepped manually
+        time++;
     }
-    print();
-    print_enzymes(markers, enzymes);
+    display();
+    display_enzymes(markers, enzymes);
     delete[] codons;
     delete[] decodons;
 

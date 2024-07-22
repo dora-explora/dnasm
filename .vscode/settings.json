@@ -3,7 +3,8 @@
         "*.rs": "rust",
         "*.tcc": "cpp",
         "iosfwd": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "ostream": "cpp"
     },
     "dimmer.enabled": false,
     "C_Cpp.errorSquiggles": "disabled"

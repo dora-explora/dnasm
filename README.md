@@ -26,14 +26,13 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 
 | Instruction | Name | Description + Arguments |
 |-------------|------|-------------------------|
-| 001111      | Cursor Jump | 110011abcd sets the cursor to abcd. (0 - 2^24) |
-| 111100      | Instruction Jump | 110011abcd sets the instruction pointer to abcd. (0 - 2^24) |
+| 001111      | Cursor Jump | 001111abcd sets the cursor to abcd. (0 - 2^24) |
+| 111100      | Instruction Jump | 111100abcd sets the instruction pointer to abcd. (0 - 2^24) |
 | 110011      | Substitution | 110011ab replaces all a seen in the future with b. |
 | 111000      | Step Forward | Set the cursor forward a codon. |
 | 000111      | Step Backward | Set the cursor back a codon. |
 | 000100      | Output | 000100a will push a to the output strand (cout/stdout). |
 | 000101      | Output at Cursor | Outputs the value of the current location codon to the output strand (cout/stdout). |
-| 100101      | Insert | 100101ab will insert b after a when a is seen. |
 | 111111      | Execute | Execute the codon at the cursor as an instruction. |
 | 000000      | Blank | Does absolutely nothing. |
 
@@ -57,4 +56,4 @@ Every time the ribosome passes an instruction, time will step. Because of this, 
 
 When an enzymes turn comes up, they will read, execute, and finish the instruction before the order moves on to the next object.
 
-**Note:** The ribosome will deploy enzymes when it reads the deploy *instruction*, not when it reads the 4 codons after it.
+**Note:** Enzymes and the ribosome will perform actions corresponding to an instruction when the **instruction** is read, not when the args are finished being read. The args will be skipped over.
