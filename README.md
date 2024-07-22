@@ -56,4 +56,4 @@ Every time the ribosome passes an instruction, time will step. Because of this, 
 
 When an enzymes turn comes up, they will read, execute, and finish the instruction before the order moves on to the next object.
 
-**Note:** Enzymes and the ribosome will perform actions corresponding to an instruction when the **instruction** is read, not when the args are finished being read. The args will be skipped over.
+**Note:** The ribosome will perform actions corresponding to an instruction when the **instruction** is read, not when the args are finished being read. The args will be skipped over.

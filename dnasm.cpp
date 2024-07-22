@@ -23,8 +23,8 @@ class Enzyme {
     int cursor; // cursor for where the enzyme is in the code
     int instrptr; // instruction pointer
     char subarg1; // first arg for substitution 
-    char subarg2; // second arg for substitution 
-    bool direction; // direction to travel in: true if forward, false if backward
+    char subarg2; // second arg for substitution
+    int cooldown; // how long to wait for args to be read
     bool backslash; // for printing
 
     Enzyme(vector<char> incodons, vector<string> indecodons) {
@@ -33,7 +33,7 @@ class Enzyme {
         length = incodons.size() - 1;
         cursor = 0;
         instrptr = 0;
-        direction = true;
+        cooldown = 0;
         backslash = false;
     }
 
@@ -50,46 +50,61 @@ class Enzyme {
         }
     }
 
+    void cursorjump () { 
+        cursor = 0;
+        cursor |= (codons[instrptr + 1] & 0x3F) << 18;
+        cursor |= (codons[instrptr + 2] & 0x3F) << 12;
+        cursor |= (codons[instrptr + 3] & 0x3F) << 6;
+        cursor |= (codons[instrptr + 4] & 0x3F);
+        cout << "Cursor: " << bitset<24>(cursor) << endl;
+    }
+    
+    void instructionjump () {
+        int tempinstrptr = instrptr;
+        instrptr = 0;
+        instrptr |= (codons[tempinstrptr - 3] & 0x3F) << 18;
+        instrptr |= (codons[tempinstrptr - 2] & 0x3F) << 12;
+        instrptr |= (codons[tempinstrptr - 1] & 0x3F) << 6;
+        instrptr |= (codons[tempinstrptr] & 0x3F);
+        cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
+    }
+
     char* step(char* globalcodons) {
         string current = decodons[instrptr];
         if (globalcodons[cursor] == subarg1) {
             globalcodons[cursor] = subarg2;
         }
-        if (current == "JmpCur") {
-            cursor = 0;
-            cursor |= (codons[instrptr + 1] & 0x3F) << 18;
-            cursor |= (codons[instrptr + 2] & 0x3F) << 12;
-            cursor |= (codons[instrptr + 3] & 0x3F) << 6;
-            cursor |= (codons[instrptr + 4] & 0x3F);
-            cout << "Cursor: " << bitset<24>(cursor) << endl;
-            instrptr += 5;
+        if (cooldown > 0) {
+            if (cooldown <= 2 && decodons[(instrptr - 3 + cooldown)] == "Substi") {
+                if (cooldown == 2) { 
+                    subarg1 = codons[instrptr]; 
+                }
+                if (cooldown == 1) {
+                    subarg2 = codons[instrptr];
+                }
+            } else if (cooldown == 1 && decodons[instrptr - 4] == "CurJmp") { 
+                cursorjump(); 
+            } else if (cooldown == 1 && decodons[instrptr - 4] == "InsJmp") { 
+                instructionjump();
+                instrptr--; // could have adverse effects... 
+            }
+            cooldown--;
+        } else if (current == "CurJmp") {
+            cooldown = 4;
         } else if (current == "InsJmp") {
-            int tempinstrptr = instrptr;
-            instrptr = 0;
-            instrptr |= (codons[tempinstrptr + 1] & 0x3F) << 18;
-            instrptr |= (codons[tempinstrptr + 2] & 0x3F) << 12;
-            instrptr |= (codons[tempinstrptr + 3] & 0x3F) << 6;
-            instrptr |= (codons[tempinstrptr + 4] & 0x3F);
-            cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
+            cooldown = 4;
         } else if (current == "Substi") {
-            subarg1 = codons[instrptr + 1];
-            subarg2 = codons[instrptr + 2];
-            instrptr += 3;
+            cooldown = 2;
         } else if (current == "StpFwd") {
             cursor++;
-            instrptr++;
         } else if (current == "StpBwd") {
             cursor--;
-            instrptr++;
         } else if (current == "Output") {
             print(codons[instrptr + 1]);
-            instrptr += 2;
         } else if (current == "OutCur") {
             // yeahhhhhhhhh i need to figure this out
-            instrptr++;
-        } else {
-            instrptr++;
-        }
+        } 
+        instrptr++;
         return globalcodons;
     };
 };
@@ -170,7 +185,7 @@ void decode() {
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing && codons[i] == 0b001111) {
-            decodons[i] = "JmpCur";
+            decodons[i] = "CurJmp";
             decodons[i+1] = "Arg 1 ";
             decodons[i+2] = "Arg 2 ";
             decodons[i+3] = "Arg 3 ";
@@ -245,13 +260,10 @@ int main() {
         ribcurrent = decodons[ribcursor];
         if (cooldown != 0) {
             cooldown--;
-            ribcursor++;
         } else if (!attached && !writing && ribcurrent == "Attach") {
             attached = true;
-            ribcursor++;
         } else if (attached && !writing && ribcurrent == "Detach") {
             attached = false;
-            ribcursor++;
         } else if (attached && writing && ribcurrent == "EndPro") {
             enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
             markers.push_back(workingmarker);
@@ -259,15 +271,12 @@ int main() {
             workingcodons.clear();
             workingdecodons.clear();
             writing = false;
-            ribcursor++;
         } else if (attached && !writing && ribcurrent == "BegPro") {
             writing = true;
             workingmarker = codons[ribcursor+1];
             cooldown = 1;
-            ribcursor++;
         } else if (attached && !writing && ribcurrent == "Ready ") {
             readiedmarkers.push_back(codons[ribcursor]);
-            ribcursor++;
         } else if (attached && !writing && ribcurrent == "RunPro") {
             for (int i = 0; i < readiedmarkers.size(); i++) { 
                 runningmarkers.push_back(readiedmarkers[i]); 
@@ -279,24 +288,23 @@ int main() {
                 enzymes.at(readiedmarkers[i]).cursor = initialcursor;
             };
             readiedmarkers.clear();
-            ribcursor++;
         } else if (attached && !writing && ribcurrent == "RibJmp") {
             ribcursor = 0;
             ribcursor |= (codons[ribcursor+1] & 0x3F) << 18;
             ribcursor |= (codons[ribcursor+2] & 0x3F) << 12;
             ribcursor |= (codons[ribcursor+3] & 0x3F) << 6;
             ribcursor |= (codons[ribcursor+4] & 0x3F);
+            cooldown = 4;
         } else if (attached && writing) {
             workingcodons.push_back(codons[ribcursor]);
             workingdecodons.push_back(decodons[ribcursor]);
-            ribcursor++;
         } else if (writing && !attached) {
             cout << "???????" << endl;
-        } else if (!writing) {
-            ribcursor++;
         }
-        cout << "ribosomes cursor: " << ribcursor << endl;
+        if (ribcurrent != "RibJmp") { ribcursor++; }
         display();
+        cout << "ribosomes cursor: " << ribcursor << endl;
+        cout << "time: " << time << endl;
         // cin >> nothing; // just so time can be stepped manually
         time++;
     }
