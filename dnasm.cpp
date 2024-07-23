@@ -26,6 +26,7 @@ class Enzyme {
     char subarg2; // second arg for substitution
     int cooldown; // how long to wait for args to be read
     bool backslash; // for printing
+    bool substituting; // turned on if subarg1 and subarg2 are set, turns off if they're not set or are actively being set 
 
     Enzyme(vector<char> incodons, vector<string> indecodons) {
         codons = incodons;
@@ -56,7 +57,7 @@ class Enzyme {
         cursor |= (codons[instrptr + 2] & 0x3F) << 12;
         cursor |= (codons[instrptr + 3] & 0x3F) << 6;
         cursor |= (codons[instrptr + 4] & 0x3F);
-        cout << "Cursor: " << bitset<24>(cursor) << endl;
+        // cout << "Cursor: " << bitset<24>(cursor) << endl;
     }
     
     void instructionjump () {
@@ -66,22 +67,26 @@ class Enzyme {
         instrptr |= (codons[tempinstrptr - 2] & 0x3F) << 12;
         instrptr |= (codons[tempinstrptr - 1] & 0x3F) << 6;
         instrptr |= (codons[tempinstrptr] & 0x3F);
-        cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
+        // cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
     }
 
     char* step(char* globalcodons) {
         string current = decodons[instrptr];
-        if (globalcodons[cursor] == subarg1) {
+        if (globalcodons[cursor] == subarg1 && substituting) {
             globalcodons[cursor] = subarg2;
         }
         if (cooldown > 0) {
             if (cooldown <= 2 && decodons[(instrptr - 3 + cooldown)] == "Substi") {
                 if (cooldown == 2) { 
                     subarg1 = codons[instrptr]; 
+                    substituting = false;
                 }
                 if (cooldown == 1) {
                     subarg2 = codons[instrptr];
+                    substituting = true;
                 }
+            } else if (cooldown == 1 && decodons[instrptr - 1] == "Replac") {   
+                globalcodons[instrptr - 1] = codons[instrptr];
             } else if (cooldown == 1 && decodons[instrptr - 4] == "CurJmp") { 
                 cursorjump(); 
             } else if (cooldown == 1 && decodons[instrptr - 4] == "InsJmp") { 
@@ -95,6 +100,8 @@ class Enzyme {
             cooldown = 4;
         } else if (current == "Substi") {
             cooldown = 2;
+        } else if (current == "Replac") {
+            cooldown = 1;
         } else if (current == "StpFwd") {
             cursor++;
         } else if (current == "StpBwd") {
@@ -127,9 +134,40 @@ class Ribosome {
     int cooldown = 0; // cooldown, used for when ribosome has to read bytes for timing but doesn't need to actually do anything with them
     int initialcursor; // where readied enzymes are deployed to at first 
 
+    void runproteins() {
+        for (int i = 0; i < readiedmarkers.size(); i++) { 
+            runningmarkers.push_back(readiedmarkers[i]); 
+            initialcursor = 0;
+            initialcursor |= (codons[ribcursor-3] & 0x3F) << 18;
+            initialcursor |= (codons[ribcursor-2] & 0x3F) << 12;
+            initialcursor |= (codons[ribcursor-1] & 0x3F) << 6;
+            initialcursor |= (codons[ribcursor] & 0x3F);
+            enzymes.at(readiedmarkers[i]).cursor = initialcursor;
+        }
+        readiedmarkers.clear();
+    }
+
+    void ribosomejump() {
+        int tempribcursor = ribcursor;
+        ribcursor = 0;
+        ribcursor |= (codons[tempribcursor-3] & 0x3F) << 18;
+        ribcursor |= (codons[tempribcursor-2] & 0x3F) << 12;
+        ribcursor |= (codons[tempribcursor-2] & 0x3F) << 6;
+        ribcursor |= (codons[tempribcursor] & 0x3F);
+    }
+
+
+
     void step() {
         ribcurrent = decodons[ribcursor];
         if (cooldown != 0) {
+            if (cooldown == 1) {
+                if (decodons[ribcursor - 4] == "RunPro") {
+                    runproteins();
+                } else if (decodons[ribcursor - 4] == "RibJmp") {
+                    ribosomejump();
+                }
+            }
             cooldown--;
         } else if (!attached && !writing && ribcurrent == "Attach") {
             attached = true;
@@ -149,30 +187,15 @@ class Ribosome {
         } else if (attached && !writing && ribcurrent == "Ready ") {
             readiedmarkers.push_back(codons[ribcursor]);
         } else if (attached && !writing && ribcurrent == "RunPro") {
-            for (int i = 0; i < readiedmarkers.size(); i++) { 
-                runningmarkers.push_back(readiedmarkers[i]); 
-                initialcursor = 0;
-                initialcursor |= (codons[ribcursor+1] & 0x3F) << 18;
-                initialcursor |= (codons[ribcursor+2] & 0x3F) << 12;
-                initialcursor |= (codons[ribcursor+3] & 0x3F) << 6;
-                initialcursor |= (codons[ribcursor+4] & 0x3F);
-                enzymes.at(readiedmarkers[i]).cursor = initialcursor;
-            };
-            readiedmarkers.clear();
+            cooldown = 4;
         } else if (attached && !writing && ribcurrent == "RibJmp") {
-            ribcursor = 0;
-            ribcursor |= (codons[ribcursor+1] & 0x3F) << 18;
-            ribcursor |= (codons[ribcursor+2] & 0x3F) << 12;
-            ribcursor |= (codons[ribcursor+3] & 0x3F) << 6;
-            ribcursor |= (codons[ribcursor+4] & 0x3F);
             cooldown = 4;
         } else if (attached && writing) {
             workingcodons.push_back(codons[ribcursor]);
             workingdecodons.push_back(decodons[ribcursor]);
         } else if (writing && !attached) {
-            cout << "???????" << endl;
+            cout << "??????" << endl;
         }
-        if (ribcurrent != "RibJmp") { ribcursor++; }
     }
 };
 
@@ -270,6 +293,10 @@ void decode() {
             decodons[i+1] = "Arg 1 ";
             decodons[i+2] = "Arg 2 ";
             i += 2;
+        } else if (attached && writing && codons[i] == 0b100101) {
+            decodons[i] = "Replac";
+            decodons[i+1] = "Arg 1 ";
+            i += 1;
         } else if (attached && writing && codons[i] == 0b111000) {
             decodons[i] = "StpFwd";
         } else if (attached && writing && codons[i] == 0b000111) {
@@ -314,10 +341,11 @@ int main() {
         // then execute the ribosomes stuff
         ribosome.step();
         display();
-        cout << "ribosomes cursor: " << ribosome.ribcursor << endl;
+        cout << "ribosomes cursor: " << (ribosome.ribcursor) << endl;
         cout << "time: " << time << endl;
         // cin >> nothing; // just so time can be stepped manually
         time++;
+        if (ribosome.ribcurrent != "RibJmp") { ribosome.ribcursor++; }
     }
     display();
     display_enzymes(markers, enzymes);
