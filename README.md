@@ -41,20 +41,20 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 
 ## Details
 
+All enzymes and the ribosome will only execute instructions after every argument is read. If an instruction has no arguments, it will be executed directly after it's read. Otherwise, the instruction will be done directly after the last argument is read.
+
 ### Ribosome Behavior
 
 The ribosome will step along every instruction in the program, but will only do anything if attached. Once the ribosome reaches the end of the program (or instruction #2^32-1), the program will finish.
 
 ### Enzyme Behavior
 
-(Yeah I havent written this yet)
+At the start of their turn, enzymes will check the codon at their cursor for a match for substitution, read the codon at their instruction pointer, then execute anything if needed.
 
 ### Timing
 
-**All processes in DNAsm happen in timesteps**. Enzyme's execute in the order they were written in. The ribosome will start by reading all enzymes and deploying all the readied ones. When the ribosome first attaches, time will start.
+**All processes in DNAsm happen in timesteps.** Enzyme's execute in the order they were written in. The ribosome will start by reading all enzymes and deploying all the readied ones. When the ribosome first attaches, time will start.
 
 Every time the ribosome passes an instruction, time will step. Because of this, the ribosome always executes last. At the start of the program, the ribosome will execute until it deploys an enzyme. After that, enzymes will execute in the order they were written until the ribosome steps/executes, and then time steps again.
 
-When an enzymes turn comes up, they will read, execute, and finish the instruction before the order moves on to the next object.
-
-**Note:** The ribosome will perform actions corresponding to an instruction when the **instruction** is read, not when the args are finished being read. The args will be skipped over.
+When an enzymes turn comes up, they will read, execute, and finish the instruction before the order moves on to the next enzyme/ribosome.

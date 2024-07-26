@@ -127,6 +127,7 @@ class Ribosome {
     char workingmarker; // marker of the enzyme currently being transcribed
     bool attached = false; // true if ribosome is currently attached
     bool writing = false; // true if ribosome is currently writing
+    bool commenting = false; // true if ribosome is currently commenting
     int ribcursor = 0; // ribosomes position/cursor
     string ribcurrent; // decodon at ribosomes cursor
     vector<char> workingcodons; // codons of ribosomes working enzyme
@@ -160,7 +161,11 @@ class Ribosome {
 
     void step() {
         ribcurrent = decodons[ribcursor];
-        if (cooldown != 0) {
+        if (commenting) {
+            // do absolutely nothing, its a comment
+            if (ribcurrent == "Comment") { commenting = false; }
+        }
+        else if (cooldown != 0) {
             if (cooldown == 1) {
                 if (decodons[ribcursor - 4] == "RunPro") {
                     runproteins();
@@ -190,6 +195,8 @@ class Ribosome {
             cooldown = 4;
         } else if (attached && !writing && ribcurrent == "RibJmp") {
             cooldown = 4;
+        } else if (attached && !writing && ribcurrent == "Comment") {
+            commenting = true;
         } else if (attached && writing) {
             workingcodons.push_back(codons[ribcursor]);
             workingdecodons.push_back(decodons[ribcursor]);
@@ -240,6 +247,7 @@ void open(string filename) {
 void decode() {
     bool attached = false;
     bool writing = false;
+    bool commenting = false;
     // determine purpose of each codon in (codon, six character string) pairs
     decodons = new string[length];
     // loop over codons and determine purpose
@@ -247,6 +255,8 @@ void decode() {
         if (codons[i] == 0b111110) {
             attached = 1;
             decodons[i] = "Attach";
+        } else if (commenting) {
+            if (codons[i] == 0b101101) { commenting = false; }
         } else if (codons[i] == 0b110000 && attached) {
             writing = 1;
             decodons[i] = "BegPro";
@@ -272,6 +282,9 @@ void decode() {
             decodons[i+3] = "Arg 3 ";
             decodons[i+4] = "Arg 4 ";
             i += 4;
+        } else if (attached && !writing && codons[i] == 0b101101) {
+            decodons[i] = "Comment";
+            commenting = true;
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
         } else if (attached && writing && codons[i] == 0b001111) {
@@ -310,7 +323,7 @@ void decode() {
         } else if (attached && writing && codons[i] == 0b111111) {
             decodons[i] = "Execut";
         } else if (attached && writing && codons[i] == 0b000000) {
-            decodons[i] = "Data  ";
+            decodons[i] = "Blank ";
         } else {
             decodons[i] = "      ";
         }
@@ -345,7 +358,7 @@ int main() {
         cout << "time: " << time << endl;
         // cin >> nothing; // just so time can be stepped manually
         time++;
-        if (ribosome.ribcurrent != "RibJmp") { ribosome.ribcursor++; }
+        ribosome.ribcursor++;
     }
     display();
     display_enzymes(markers, enzymes);
