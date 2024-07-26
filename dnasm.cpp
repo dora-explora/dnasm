@@ -240,7 +240,7 @@ void open(string filename) {
         file.close();
     } else {
         cout << "Error: Unable to open file" << endl;
-        // throw std::invalid_argument("Unable to open file; It either doesn't exist, or this program doesn't have permissions.");
+        // throw std::invalid_argument("Unable to open file; It either doesn't exist, or this program doesn't have the permissions.");
     }
 }
 
@@ -343,7 +343,7 @@ int main() {
 
     Ribosome ribosome;
 
-    string nothing;
+    // string nothing;
     // main loop!
     while (!finished && time != -2147483647 && ribosome.ribcursor != (length)) {
         // execute all enzymes

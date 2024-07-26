@@ -2,8 +2,10 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream> 
 #include <string>
 #include <vector>
+#include <bitset>
 
 using namespace std;
 
@@ -12,13 +14,17 @@ class Token {
         string text; // text of the token
         char codon; // the tokens corresponding codon
 
-    Token(string intext) {
-        text = intext;
+    Token(string inputtext) {
+        text = inputtext;
     }
 
-    char bindecode(string input) {
+    char bindecode() {
         char output = 0b000000;
-        
+        for (int i = 0; i < 6; i++) {
+            if (text[i] == '1') {
+                output |= (0b000001 << (5 - i));
+            }
+        }
         return output;
     } 
 
@@ -26,30 +32,42 @@ class Token {
 
 
 
-void open(string filename) {
+string open(string filename) {
     int length = 0;
-    char* bytes;
     // read file
     ifstream file(filename, ios::binary | ios::in);
     // open file as array of bytes
     if (file.is_open()) {
-        file.seekg(0, file.end);
-        length = file.tellg();
-        file.seekg(0, file.beg);
-        bytes = new char[length];
-        file.read(bytes, length);
+        string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
         file.close();
+        return content;
     } else {
-        cout << "Error: Unable to open file" << endl;
-        // throw std::invalid_argument("Unable to open file; It either doesn't exist, or this program doesn't have permissions.");
+        // cout << "Error: Unable to open file" << endl;
+        throw std::invalid_argument("Unable to open file; It either doesn't exist, or this program doesn't have the permissions.");
     }
 }
 
 int main() {
     string filename;
-    cout << "your filename: ";
-    cin >> filename;
-    open(filename);
-    vector<Token> tokens;
+    string content;
+    vector<Token> tokens; 
+    // cout << "your filename: ";
+    // cin >> filename;
+    filename = "dnasmparserexample.txt";
+    content = open(filename);
+    istringstream stream(content);
+    string workingtokentext; 
+    while (getline(stream, workingtokentext, ' ') || getline(stream, workingtokentext, '\n')) {
+        tokens.push_back(Token(workingtokentext));
+    }
+    for (Token workingtoken : tokens) {
+        if (workingtoken.text[1] == '0' || workingtoken.text[1] == '1') {
+            workingtoken.codon = workingtoken.bindecode(); 
+        } else {
+            switch(workingtoken.text) {
+
+            }
+        }
+    }
     return 1;
 }
