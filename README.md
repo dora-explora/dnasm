@@ -29,7 +29,7 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 001111      | Cursor Jump | 001111abcd sets the cursor to abcd. (0 - 2^24) |
 | 111100      | Instruction Jump | 111100abcd sets the instruction pointer to abcd. (0 - 2^24) |
 | 110011      | Substitution | 110011ab replaces all a seen in the future with b. |
-| 100101      | Insert | 100101a replaces the codon at the cursor with a. |
+| 100101      | Replace | 100101a replaces the codon at the cursor with a. |
 | 111000      | Step Forward | Set the cursor forward a codon. |
 | 000111      | Step Backward | Set the cursor back a codon. |
 | 000100      | Output | 000100a will push a to the output strand (cout/stdout). |

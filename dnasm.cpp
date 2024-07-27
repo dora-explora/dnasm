@@ -163,7 +163,7 @@ class Ribosome {
         ribcurrent = decodons[ribcursor];
         if (commenting) {
             // do absolutely nothing, its a comment
-            if (ribcurrent == "Comment") { commenting = false; }
+            if (ribcurrent == "Commnt") { commenting = false; }
         }
         else if (cooldown != 0) {
             if (cooldown == 1) {
@@ -195,7 +195,7 @@ class Ribosome {
             cooldown = 4;
         } else if (attached && !writing && ribcurrent == "RibJmp") {
             cooldown = 4;
-        } else if (attached && !writing && ribcurrent == "Comment") {
+        } else if (attached && !writing && ribcurrent == "Commnt") {
             commenting = true;
         } else if (attached && writing) {
             workingcodons.push_back(codons[ribcursor]);
@@ -239,8 +239,7 @@ void open(string filename) {
         file.read(codons, length);
         file.close();
     } else {
-        cout << "Error: Unable to open file" << endl;
-        // throw std::invalid_argument("Unable to open file; It either doesn't exist, or this program doesn't have the permissions.");
+        throw std::invalid_argument("Unable to open file; It either doesn't exist, or this program doesn't have the permissions.");
     }
 }
 
@@ -283,7 +282,7 @@ void decode() {
             decodons[i+4] = "Arg 4 ";
             i += 4;
         } else if (attached && !writing && codons[i] == 0b101101) {
-            decodons[i] = "Comment";
+            decodons[i] = "Commnt";
             commenting = true;
         } else if (attached && !writing) {
             decodons[i] = "Ready ";
