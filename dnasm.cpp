@@ -336,7 +336,7 @@ int main() {
     string filename;
     // cout << "Type in the name of your file (ex. DNAsm.bin):\n";
     // cin >> filename;
-    filename = "dnasmparserexample.bin";
+    filename = "dnasmparserexampleB.bin";
     open(filename);
     decode();
 

@@ -89,7 +89,7 @@ int main() {
     vector<Token> tokens; 
     // cout << "Please enter the files name: ";
     // cin >> filename;
-    filename = "dnasmparserexample.txt";
+    filename = "dnasmparserexampleB.txt";
     content = open(filename);
     replace(content.begin(), content.end(), '\n', ' ');
     istringstream stream(content);
@@ -109,7 +109,7 @@ int main() {
     }
     // cout << "Please enter the name of your output file: ";
     // cin >> filename;
-    filename = "dnasmparserexample.bin";
+    filename = "dnasmparserexampleB.bin";
     write(filename, tokens);
     return 1;
 }
