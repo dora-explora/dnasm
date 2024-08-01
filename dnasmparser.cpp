@@ -95,7 +95,9 @@ int main() {
     istringstream stream(content);
     string workingtokentext; 
     while (getline(stream, workingtokentext, ' ') || getline(stream, workingtokentext, '\n')) {
-        tokens.push_back(Token(workingtokentext));
+        if (workingtokentext[0] != ' ' && workingtokentext[0] != '\n' && workingtokentext != "") { 
+            tokens.push_back(Token(workingtokentext)); 
+        }
     }
     for (int i = 0; i < tokens.size(); i++) {
         if (tokens[i].text[1] == '0' || tokens[i].text[1] == '1') {
