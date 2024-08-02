@@ -9,6 +9,8 @@
 #include <bitset>
 #include <tuple>
 
+#include "./DNAsmOF/src/dnasm.h"
+
 using namespace std;
 
 string* decodons; // all decodons in strings (human readable and properly identified)
@@ -329,12 +331,22 @@ void decode() {
     }
 }
 
+// this will setup dnasm, and will be executed in ofapp.cpp
+void setup() {
+    int time = 0;
+    string filename;
+    cout << "Type in the name of your file (ex. DNAsm.bin): ";
+    cin >> filename;
+    open(filename);
+    decode();
+}
+
 int main() {
     int time = 0;
     bool finished = false;
 
     string filename;
-    // cout << "Type in the name of your file (ex. DNAsm.bin):\n";
+    // cout << "Type in the name of your file (ex. DNAsm.bin): ";
     // cin >> filename;
     filename = "dnasmparserexampleB.bin";
     open(filename);

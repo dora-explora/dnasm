@@ -1,8 +1,16 @@
 #include "ofApp.h"
+#include "ofxGui.h"
+#include "dnasm.h"
+
+ofxPanel gui;
+ofxIntSlider position;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofBackground(255,255,255);
+    gui.setup();
+    gui.add(position.setup("position", 0, 0, 300));
+
+    ofBackground(255);
     ofSetWindowTitle("DNAsm");
     ofSetFrameRate(60);
 }
@@ -14,7 +22,12 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+    ofSetColor(0);
+    ofNoFill();
+    ofSetLineWidth(5);
+    ofDrawRectRounded(20, ofGetHeight()/2, 60, 60, 15);
+    ofDrawRectRounded(120, ofGetHeight()/2, 60, 60, 15);
+    gui.draw();
 }
 
 //--------------------------------------------------------------
