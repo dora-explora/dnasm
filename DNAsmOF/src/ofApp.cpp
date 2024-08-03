@@ -3,21 +3,27 @@
 #include "dnasm.h"
 
 ofxPanel gui;
-ofxIntSlider position;
-ofxIntSlider speed;
+// ofxInputField positioninput;
+ofxIntSlider speedslider;
+ofxLabel decodonA;
+
+DNAsm dnasm;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+
+    string filename;
+    filename = "../../DNAsm.bin";
+	dnasm.setup(filename);
+
     gui.setup();
-    gui.add(position.setup("position", 0, 0, 300));
-    gui.add(speed.setup("speed", 10, 0, 100));
+    // gui.add(positioninput.setup(ofParameter<int>, 100, 20));
+    gui.add(speedslider.setup("speed", 10, 0, 100));
+    gui.add(decodonA.setup("decodonA", "please wait..", 100, 20));
 
     ofBackground(255);
     ofSetWindowTitle("DNAsm");
     ofSetFrameRate(60);
-
-	DNAsm dnasm;
-	dnasm.open();
 }
 
 //--------------------------------------------------------------
@@ -31,8 +37,10 @@ void ofApp::draw(){
     ofNoFill();
     ofSetLineWidth(5);
     ofDrawRectRounded(20, ofGetHeight()/2, 60, 60, 15);
-    ofDrawRectRounded(120, ofGetHeight()/2, 60, 60, 15);
-    ofDrawRectRounded(220, ofGetHeight()/2, 60, 60, 15);
+    // ofDrawRectRounded(120, ofGetHeight()/2, 60, 60, 15);
+    // ofDrawRectRounded(220, ofGetHeight()/2, 60, 60, 15);
+    // ofDrawRectRounded(320, ofGetHeight()/2, 60, 60, 15);
+    decodonA.operator=(dnasm.decodons[0]);
     gui.draw();
 }
 

@@ -17,105 +17,89 @@ string* decodons; // all decodons in strings (human readable and properly identi
 char* codons; // all codons in chars (single bytes)
 int length; // length of file in bytes (codons)
 
-class Enzyme {
-    public:
-    vector<char> codons; // all the enzymes codons
-    vector<string> decodons; // all the enzymes decodons
-    int length; // length of enzymes code, starts at 0 (for iterating)
-    int cursor; // cursor for where the enzyme is in the code
-    int instrptr; // instruction pointer
-    char subarg1; // first arg for substitution 
-    char subarg2; // second arg for substitution
-    int cooldown; // how long to wait for args to be read
-    bool backslash; // for printing
-    bool substituting; // turned on if subarg1 and subarg2 are set, turns off if they're not set or are actively being set 
-
-    Enzyme(vector<char> incodons, vector<string> indecodons) {
-        codons = incodons;
-        decodons = indecodons;
-        length = incodons.size() - 1;
-        cursor = 0;
-        instrptr = 0;
-        cooldown = 0;
-        backslash = false;
-    }
-
-    void print(char rawinput) {
-        char input = (rawinput | 0b0100000);
-        if (backslash) {
-            if (input == 0b01101110) {
-                cout << endl; // for \n 
-            }
-        } else if (rawinput == 0b00111110) {
-            cout <<  ' ';
-        } else {
-            cout << (0b01000000 || input);
+// Enzyme definition
+Enzyme::Enzyme(vector<char> incodons, vector<string> indecodons) {
+    codons = incodons;
+    decodons = indecodons;
+    length = incodons.size() - 1;
+    cursor = 0;
+    instrptr = 0;
+    cooldown = 0;
+    backslash = false;
+}
+void Enzyme::print(char rawinput) {
+    char input = (rawinput | 0b0100000);
+    if (backslash) {
+        if (input == 0b01101110) {
+            cout << endl; // for \n 
         }
+    } else if (rawinput == 0b00111110) {
+        cout <<  ' ';
+    } else {
+        cout << (0b01000000 || input);
     }
+}
+void Enzyme::cursorjump () { 
+    cursor = 0;
+    cursor |= (codons[instrptr + 1] & 0x3F) << 18;
+    cursor |= (codons[instrptr + 2] & 0x3F) << 12;
+    cursor |= (codons[instrptr + 3] & 0x3F) << 6;
+    cursor |= (codons[instrptr + 4] & 0x3F);
+    // cout << "Cursor: " << bitset<24>(cursor) << endl;
+}
 
-    void cursorjump () { 
-        cursor = 0;
-        cursor |= (codons[instrptr + 1] & 0x3F) << 18;
-        cursor |= (codons[instrptr + 2] & 0x3F) << 12;
-        cursor |= (codons[instrptr + 3] & 0x3F) << 6;
-        cursor |= (codons[instrptr + 4] & 0x3F);
-        // cout << "Cursor: " << bitset<24>(cursor) << endl;
+void Enzyme::instructionjump () {
+    int tempinstrptr = instrptr;
+    instrptr = 0;
+    instrptr |= (codons[tempinstrptr - 3] & 0x3F) << 18;
+    instrptr |= (codons[tempinstrptr - 2] & 0x3F) << 12;
+    instrptr |= (codons[tempinstrptr - 1] & 0x3F) << 6;
+    instrptr |= (codons[tempinstrptr] & 0x3F);
+    // cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
+}
+char* Enzyme::step(char* globalcodons) {
+    string current = decodons[instrptr];
+    if (globalcodons[cursor] == subarg1 && substituting) {
+        globalcodons[cursor] = subarg2;
     }
-    
-    void instructionjump () {
-        int tempinstrptr = instrptr;
-        instrptr = 0;
-        instrptr |= (codons[tempinstrptr - 3] & 0x3F) << 18;
-        instrptr |= (codons[tempinstrptr - 2] & 0x3F) << 12;
-        instrptr |= (codons[tempinstrptr - 1] & 0x3F) << 6;
-        instrptr |= (codons[tempinstrptr] & 0x3F);
-        // cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
-    }
-
-    char* step(char* globalcodons) {
-        string current = decodons[instrptr];
-        if (globalcodons[cursor] == subarg1 && substituting) {
-            globalcodons[cursor] = subarg2;
-        }
-        if (cooldown > 0) {
-            if (cooldown <= 2 && decodons[(instrptr - 3 + cooldown)] == "Substi") {
-                if (cooldown == 2) { 
-                    subarg1 = codons[instrptr]; 
-                    substituting = false;
-                }
-                if (cooldown == 1) {
-                    subarg2 = codons[instrptr];
-                    substituting = true;
-                }
-            } else if (cooldown == 1 && decodons[instrptr - 1] == "Replac") {   
-                globalcodons[instrptr - 1] = codons[instrptr];
-            } else if (cooldown == 1 && decodons[instrptr - 4] == "CurJmp") { 
-                cursorjump(); 
-            } else if (cooldown == 1 && decodons[instrptr - 4] == "InsJmp") { 
-                instructionjump();
-                instrptr--; // could have adverse effects... 
+    if (cooldown > 0) {
+        if (cooldown <= 2 && decodons[(instrptr - 3 + cooldown)] == "Substi") {
+            if (cooldown == 2) { 
+                subarg1 = codons[instrptr]; 
+                substituting = false;
             }
-            cooldown--;
-        } else if (current == "CurJmp") {
-            cooldown = 4;
-        } else if (current == "InsJmp") {
-            cooldown = 4;
-        } else if (current == "Substi") {
-            cooldown = 2;
-        } else if (current == "Replac") {
-            cooldown = 1;
-        } else if (current == "StpFwd") {
-            cursor++;
-        } else if (current == "StpBwd") {
-            cursor--;
-        } else if (current == "Output") {
-            print(codons[instrptr + 1]);
-        } else if (current == "OutCur") {
-            // yeahhhhhhhhh i need to figure this out
-        } 
-        instrptr++;
-        return globalcodons;
-    };
+            if (cooldown == 1) {
+                subarg2 = codons[instrptr];
+                substituting = true;
+            }
+        } else if (cooldown == 1 && decodons[instrptr - 1] == "Replac") {   
+            globalcodons[instrptr - 1] = codons[instrptr];
+        } else if (cooldown == 1 && decodons[instrptr - 4] == "CurJmp") { 
+            cursorjump(); 
+        } else if (cooldown == 1 && decodons[instrptr - 4] == "InsJmp") { 
+            instructionjump();
+            instrptr--; // could have adverse effects... 
+        }
+        cooldown--;
+    } else if (current == "CurJmp") {
+        cooldown = 4;
+    } else if (current == "InsJmp") {
+        cooldown = 4;
+    } else if (current == "Substi") {
+        cooldown = 2;
+    } else if (current == "Replac") {
+        cooldown = 1;
+    } else if (current == "StpFwd") {
+        cursor++;
+    } else if (current == "StpBwd") {
+        cursor--;
+    } else if (current == "Output") {
+        print(codons[instrptr + 1]);
+    } else if (current == "OutCur") {
+        // yeahhhhhhhhh i need to figure this out
+    } 
+    instrptr++;
+    return globalcodons;
 };
 
 map<char, Enzyme> enzymes; // all enzymes and their markers
@@ -208,14 +192,14 @@ class Ribosome {
     }
 };
 
-void display() {
+void DNAsm::display() {
     cout << "Codons/Decodons: " << endl;
     for (int i = 0; i < length; i++) {
         cout << "#" << i << ": 0b" << bitset<6>(codons[i]) << " - " << decodons[i] << endl;
     }
 }
 
-void display_enzymes(vector<char> markers, map<char, Enzyme> enzymes) {
+void DNAsm::display_enzymes(vector<char> markers, map<char, Enzyme> enzymes) {
     if (!markers.empty()) {
          for (int i = 0; i < (markers.size()); i++) {
              cout << "\nEnzyme #" << i << " with marker 0b" << bitset<6>(markers[i]) << endl;
@@ -332,11 +316,8 @@ void DNAsm::decode() {
 }
 
 // this will setup dnasm, and will be executed in scope of ofApp.cpp
-void DNAsm::setup() {
-    int time = 0;
-    string filename;
-    cout << "Type in the name of your file (ex. DNAsm.bin): ";
-    cin >> filename;
+void DNAsm::setup(string filename) {
+    time = 0;
     DNAsm::open(filename);
     DNAsm::decode();
 }

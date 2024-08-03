@@ -1,5 +1,5 @@
 obj/msys2/Release/src/main.o: \
- C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/DNAsmOF/src/main.cpp \
+ C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/dnasmof/src/main.cpp \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFrameworks/ofMain.h \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFrameworks/utils/ofConstants.h \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/tess2/include/tesselator.h \
@@ -304,8 +304,8 @@ obj/msys2/Release/src/main.o: \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFrameworks/3d/of3dUtils.h \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFrameworks/3d/ofCamera.h \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFrameworks/3d/ofEasyCam.h \
- C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/DNAsmOF/src/ofApp.h \
- C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/DNAsmOF/src/dnasm.h \
+ C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/dnasmof/src/ofApp.h \
+ C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/dnasmof/src/dnasm.h \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/addons/ofxGui/src/ofxGui.h \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/addons/ofxGui/src/ofxToggle.h \
  C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/addons/ofxGui/src/ofxBaseGui.h \
@@ -622,8 +622,8 @@ C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFram
 C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFrameworks/3d/of3dUtils.h:
 C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFrameworks/3d/ofCamera.h:
 C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/libs/openFrameworks/3d/ofEasyCam.h:
-C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/DNAsmOF/src/ofApp.h:
-C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/DNAsmOF/src/dnasm.h:
+C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/dnasmof/src/ofApp.h:
+C:/Users/sarra/OneDrive/Documents/DNAsm/dnasm/dnasmof/src/dnasm.h:
 C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/addons/ofxGui/src/ofxGui.h:
 C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/addons/ofxGui/src/ofxToggle.h:
 C:/Users/sarra/OneDrive/Documents/of_v0.12.0_msys2_mingw64_release/addons/ofxGui/src/ofxBaseGui.h:
