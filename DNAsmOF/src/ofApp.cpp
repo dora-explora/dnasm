@@ -4,15 +4,20 @@
 
 ofxPanel gui;
 ofxIntSlider position;
+ofxIntSlider speed;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
     gui.setup();
     gui.add(position.setup("position", 0, 0, 300));
+    gui.add(speed.setup("speed", 10, 0, 100));
 
     ofBackground(255);
     ofSetWindowTitle("DNAsm");
     ofSetFrameRate(60);
+
+	DNAsm dnasm;
+	dnasm.open();
 }
 
 //--------------------------------------------------------------
@@ -27,6 +32,7 @@ void ofApp::draw(){
     ofSetLineWidth(5);
     ofDrawRectRounded(20, ofGetHeight()/2, 60, 60, 15);
     ofDrawRectRounded(120, ofGetHeight()/2, 60, 60, 15);
+    ofDrawRectRounded(220, ofGetHeight()/2, 60, 60, 15);
     gui.draw();
 }
 
