@@ -1,2 +1,2 @@
-make -j4
+make -j6
 make run
