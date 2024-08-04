@@ -105,93 +105,77 @@ char* Enzyme::step(char* globalcodons) {
 map<char, Enzyme> enzymes; // all enzymes and their markers
 vector<char> markers; // all markers in order of when their enzymes were written, readied, running, or not.
 
-class Ribosome {
-    public:
-    vector<char> readiedmarkers; // markers of all readied enzymes
-    vector<char> runningmarkers; // markers of all running enzymes
-    char recentmarker; // marker of the enzyme that was most recently run
-    char workingmarker; // marker of the enzyme currently being transcribed
-    bool attached = false; // true if ribosome is currently attached
-    bool writing = false; // true if ribosome is currently writing
-    bool commenting = false; // true if ribosome is currently commenting
-    int ribcursor = 0; // ribosomes position/cursor
-    string ribcurrent; // decodon at ribosomes cursor
-    vector<char> workingcodons; // codons of ribosomes working enzyme
-    vector<string> workingdecodons; // decodons of ribosomes working enzyme
-    int cooldown = 0; // cooldown, used for when ribosome has to read bytes for timing but doesn't need to actually do anything with them
-    int initialcursor; // where readied enzymes are deployed to at first 
-
-    void runproteins() {
-        for (int i = 0; i < readiedmarkers.size(); i++) { 
-            runningmarkers.push_back(readiedmarkers[i]); 
-            initialcursor = 0;
-            initialcursor |= (codons[ribcursor-3] & 0x3F) << 18;
-            initialcursor |= (codons[ribcursor-2] & 0x3F) << 12;
-            initialcursor |= (codons[ribcursor-1] & 0x3F) << 6;
-            initialcursor |= (codons[ribcursor] & 0x3F);
-            enzymes.at(readiedmarkers[i]).cursor = initialcursor;
-        }
-        readiedmarkers.clear();
+// Ribosome definition
+void Ribosome::runproteins() {
+    for (int i = 0; i < readiedmarkers.size(); i++) { 
+        runningmarkers.push_back(readiedmarkers[i]); 
+        initialcursor = 0;
+        initialcursor |= (codons[ribcursor-3] & 0x3F) << 18;
+        initialcursor |= (codons[ribcursor-2] & 0x3F) << 12;
+        initialcursor |= (codons[ribcursor-1] & 0x3F) << 6;
+        initialcursor |= (codons[ribcursor] & 0x3F);
+        enzymes.at(readiedmarkers[i]).cursor = initialcursor;
     }
+    readiedmarkers.clear();
+}
 
-    void ribosomejump() {
-        int tempribcursor = ribcursor;
-        ribcursor = 0;
-        ribcursor |= (codons[tempribcursor-3] & 0x3F) << 18;
-        ribcursor |= (codons[tempribcursor-2] & 0x3F) << 12;
-        ribcursor |= (codons[tempribcursor-2] & 0x3F) << 6;
-        ribcursor |= (codons[tempribcursor] & 0x3F);
+void Ribosome::ribosomejump() {
+    int tempribcursor = ribcursor;
+    ribcursor = 0;
+    ribcursor |= (codons[tempribcursor-3] & 0x3F) << 18;
+    ribcursor |= (codons[tempribcursor-2] & 0x3F) << 12;
+    ribcursor |= (codons[tempribcursor-2] & 0x3F) << 6;
+    ribcursor |= (codons[tempribcursor] & 0x3F);
+}
+
+void Ribosome::step() {
+    // ribcurrent = decodons[ribcursor];
+    ribcurrent = "Attach";
+    if (commenting) {
+        // do absolutely nothing, its a comment
+        if (ribcurrent == "Commnt") { commenting = false; }
     }
-
-
-
-    void step() {
-        ribcurrent = decodons[ribcursor];
-        if (commenting) {
-            // do absolutely nothing, its a comment
-            if (ribcurrent == "Commnt") { commenting = false; }
-        }
-        else if (cooldown != 0) {
-            if (cooldown == 1) {
-                if (decodons[ribcursor - 4] == "RunPro") {
-                    runproteins();
-                } else if (decodons[ribcursor - 4] == "RibJmp") {
-                    ribosomejump();
-                }
+    else if (cooldown != 0) {
+        if (cooldown == 1) {
+            if (decodons[ribcursor - 4] == "RunPro") {
+                runproteins();
+            } else if (decodons[ribcursor - 4] == "RibJmp") {
+                ribosomejump();
             }
-            cooldown--;
-        } else if (!attached && !writing && ribcurrent == "Attach") {
-            attached = true;
-        } else if (attached && !writing && ribcurrent == "Detach") {
-            attached = false;
-        } else if (attached && writing && ribcurrent == "EndPro") {
-            enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
-            markers.push_back(workingmarker);
-            workingmarker = 0b00000000;
-            workingcodons.clear();
-            workingdecodons.clear();
-            writing = false;
-        } else if (attached && !writing && ribcurrent == "BegPro") {
-            writing = true;
-            workingmarker = codons[ribcursor+1];
-            cooldown = 1;
-        } else if (attached && !writing && ribcurrent == "Ready ") {
-            readiedmarkers.push_back(codons[ribcursor]);
-        } else if (attached && !writing && ribcurrent == "RunPro") {
-            cooldown = 4;
-        } else if (attached && !writing && ribcurrent == "RibJmp") {
-            cooldown = 4;
-        } else if (attached && !writing && ribcurrent == "Commnt") {
-            commenting = true;
-        } else if (attached && writing) {
-            workingcodons.push_back(codons[ribcursor]);
-            workingdecodons.push_back(decodons[ribcursor]);
-        } else if (writing && !attached) {
-            cout << "??????" << endl;
         }
+        cooldown--;
+    } else if (!attached && !writing && ribcurrent == "Attach") {
+        attached = true;
+    } else if (attached && !writing && ribcurrent == "Detach") {
+        attached = false;
+    } else if (attached && writing && ribcurrent == "EndPro") {
+        enzymes.insert(pair<char, Enzyme>(workingmarker,Enzyme (workingcodons, workingdecodons)));
+        markers.push_back(workingmarker);
+        workingmarker = 0b00000000;
+        workingcodons.clear();
+        workingdecodons.clear();
+        writing = false;
+    } else if (attached && !writing && ribcurrent == "BegPro") {
+        writing = true;
+        workingmarker = codons[ribcursor+1];
+        cooldown = 1;
+    } else if (attached && !writing && ribcurrent == "Ready ") {
+        readiedmarkers.push_back(codons[ribcursor]);
+    } else if (attached && !writing && ribcurrent == "RunPro") {
+        cooldown = 4;
+    } else if (attached && !writing && ribcurrent == "RibJmp") {
+        cooldown = 4;
+    } else if (attached && !writing && ribcurrent == "Commnt") {
+        commenting = true;
+    } else if (attached && writing) {
+        workingcodons.push_back(codons[ribcursor]);
+        workingdecodons.push_back(decodons[ribcursor]);
+    } else if (writing && !attached) {
+        cout << "??????" << endl;
     }
-};
+}
 
+// DNAsm definition
 void DNAsm::display() {
     cout << "Codons/Decodons: " << endl;
     for (int i = 0; i < length; i++) {
@@ -320,8 +304,17 @@ void DNAsm::setup(string filename) {
     time = 0;
     DNAsm::open(filename);
     DNAsm::decode();
+
+    Ribosome ribosome;
 }
 
-void/*??*/ DNAsm::step() {
-    cout << "step!!!!" << endl;
+void DNAsm::step() {
+    for (char recentmarker : ribosome.runningmarkers) {
+        codons = enzymes.at(recentmarker).step(codons);
+        decode();
+    }
+    // then execute the ribosomes stuff
+    ribosome.step();
+    time++;
+    ribosome.ribcursor++;
 }

@@ -25,12 +25,36 @@ class Enzyme {
     char* step(char* globalcodons);
 };
 
+class Ribosome {
+    public:
+    vector<char> readiedmarkers; // markers of all readied enzymes
+    vector<char> runningmarkers; // markers of all running enzymes
+    char recentmarker; // marker of the enzyme that was most recently run
+    char workingmarker; // marker of the enzyme currently being transcribed
+    bool attached = false; // true if ribosome is currently attached
+    bool writing = false; // true if ribosome is currently writing
+    bool commenting = false; // true if ribosome is currently commenting
+    int ribcursor = 0; // ribosomes position/cursor
+    string ribcurrent; // decodon at ribosomes cursor
+    vector<char> workingcodons; // codons of ribosomes working enzyme
+    vector<string> workingdecodons; // decodons of ribosomes working enzyme
+    int cooldown = 0; // cooldown, used for when ribosome has to read bytes for timing but doesn't need to actually do anything with them
+    int initialcursor; // where readied enzymes are deployed to at first 
+
+    void runproteins();
+    void ribosomejump();
+    void step();
+};
+
 class DNAsm {
     public:
 	char* codons;
 	string* decodons;
     int time;
     int length;
+    map<char, Enzyme> enzymes; // all enzymes and their markers
+    vector<char> markers; // all markers in order of when their enzymes were written, readied, running, or not.
+    Ribosome ribosome;
 
     void open(string filename);
     void decode();
