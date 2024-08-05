@@ -6,7 +6,9 @@ DNAsm dnasm;
 
 ofxPanel gui;
 ofxIntField position;
-ofxButton play;
+ofxToggle play;
+ofxToggle follow;
+bool help;
 ofxIntField speed;
 
 ofxLabel test1;
@@ -70,12 +72,14 @@ void ofApp::setup(){
 
     gui.setup();
     // "Press space to step forward in time,\n\'a\' and \'d\' to step left and right,\nand \'w\' and \'s\' to up the speed by 5."
-    gui.add(position.setup("position", 0, 0, dnasm.length - 10));
-    gui.add(play.setup("play"));
-    gui.add(speed.setup("speed", 10, 0, 100));
+    gui.add(position.setup("position:", 0, 0, dnasm.length - 10));
+    gui.add(play.setup("play", false));
+    gui.add(follow.setup("follow ribosome", false));
+    gui.add(speed.setup("speed:", 10, 1, 100));
     gui.add(test1.setup("",""));
     gui.add(test2.setup("",""));
 
+    help = true;
     ofBackground(255);
 	ofSetCircleResolution(100);
     ofFill();
@@ -90,6 +94,13 @@ void ofApp::update() {
     test1.operator=(dnasm.decodons[dnasm.ribcursor]);
     test2.operator=(std::to_string(dnasm.runningmarkers.size()));
     if (!dnasm.running) { test1.operator=("finished!"); ofBackground(200); }
+    if (ofGetElapsedTimeMillis() >= (1000 / speed) && play) {
+        ofResetElapsedTimeCounter();
+        dnasm.step();
+    }
+    if (follow && dnasm.ribcursor > 4 && dnasm.ribcursor < (dnasm.length - 5)) {
+        position = (dnasm.ribcursor - 4);
+    }
 }
 
 //--------------------------------------------------------------
@@ -98,6 +109,7 @@ void ofApp::draw(){
     for (int i = 0; i < 10; i++) {
         ofSetColor(0);
         ofDrawRectRounded(18 + (i * 100), halfway - 2, 64, 64, 10);
+        ofDrawBitmapString(dnasm.decodons[i + position], 28 + (i * 100), halfway + 80);
         bytecolor(dnasm.codons[i + position]);
         ofDrawRectRounded(20 + 5 + (i * 100), halfway + 5, 50, 50, 5);
     }
@@ -115,6 +127,9 @@ void ofApp::draw(){
     ofSetColor(255);
     ofDrawCircle(50 + ((dnasm.ribcursor - position) * 100), halfway + 30, 5);
     gui.draw(); 
+
+    ofSetColor(0);
+    if (help) { ofDrawBitmapString("Press 'o' to open a file, 'p' to play, 'f' to follow,\nspace to step once, 'a' and 'd' to scroll left and right,\n'w' and 's' to change the speed by 5 steps per second,\nand press 'h' to toggle this text.", 230, 30); }
 }
 
 //--------------------------------------------------------------
@@ -124,9 +139,17 @@ void ofApp::keyPressed(int key) {
         // test1.operator=(" ");
         dnasm.step();
         break;
-    
     case 'p':
-        // play
+        if (play) { play.operator=(false); }
+        else if (!play) { play.operator=(true); }
+        break;
+    case 'f':
+        if (follow) { follow.operator=(false); }
+        else if (!follow) { follow.operator=(true); }
+        break;
+    case 'h':
+        if (help) { help = false; }
+        else if (!help) { help = true; }
         break;
     
     case 'a':
@@ -148,7 +171,7 @@ void ofApp::keyPressed(int key) {
     case 's':
         // test1.operator=("s");
         speed.operator=(speed - 5);
-        if (speed < 0) { speed.operator=(0); }
+        if (speed < 1) { speed.operator=(1); }
         break;
     
     default:
