@@ -27,6 +27,7 @@ Enzyme::Enzyme(vector<char> incodons, vector<string> indecodons) {
     cooldown = 0;
     backslash = false;
 }
+
 void Enzyme::print(char rawinput) {
     char input = (rawinput | 0b0100000);
     if (backslash) {
@@ -303,6 +304,12 @@ void DNAsm::setup(string filename) {
     time = 0;
     DNAsm::open(filename);
     DNAsm::decode();
+
+    attached = 0;
+    writing = 0;
+    commenting = 0;
+    ribcursor = 0;
+    cooldown = 0;
 }
 
 void DNAsm::step() {

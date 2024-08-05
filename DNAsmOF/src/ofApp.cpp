@@ -9,8 +9,9 @@ ofxIntField position;
 ofxButton play;
 ofxIntField speed;
 
-ofxLabel test;
-
+// ofxLabel test1;
+// ofxLabel test2;
+// ofxLabel test3;
 
 void bytecolor(char byte) {
     int red;
@@ -73,10 +74,14 @@ void ofApp::setup(){
     gui.add(position.setup("position", 0, 0, dnasm.length - 10));
     gui.add(play.setup("play"));
     gui.add(speed.setup("speed", 10, 0, 100));
-    gui.add(test.setup("",""));
+    // gui.add(test1.setup("",""));
+    // gui.add(test2.setup("",""));
+    // gui.add(test3.setup("",""));
 
     ofBackground(255);
 	ofSetCircleResolution(100);
+    ofFill();
+    ofSetLineWidth(10);
 
     ofSetWindowTitle("DNAsm");
     ofSetFrameRate(60);
@@ -84,68 +89,69 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    test.operator=(dnasm.decodons[dnasm.ribcursor]);
+    // test1.operator=(dnasm.decodons[dnasm.ribcursor]);
+    // test2.operator=(std::to_string(position));
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetColor(0);
-    ofNoFill();
-    ofSetLineWidth(10);
+    float halfway = ofGetHeight()/2;
     for (int i = 0; i < 10; i++) {
-        ofDrawRectangle(20 + (i * 100), ofGetHeight()/2, 60, 60);
-    }
-    ofFill();
-    for (int i = 0; i < 10; i++) {
+        ofSetColor(0);
+        ofDrawRectRounded(18 + (i * 100), halfway - 2, 64, 64, 10);
         bytecolor(dnasm.codons[i + position]);
-        ofDrawRectangle(20 + 5 + (i * 100), ofGetHeight()/2 + 5, 50, 50);
+        ofDrawRectRounded(20 + 5 + (i * 100), halfway + 5, 50, 50, 5);
+    }
+    for (int i = 0; i < dnasm.runningmarkers.size(); i++) {
+        int currentposition = (dnasm.enzymes.at(dnasm.runningmarkers[i]).cursor - position);
+        if (currentposition <= 9 && currentposition >= 0) {
+            ofSetColor(0);
+            ofDrawTriangle(25 + (currentposition * 100), halfway - 50, 75 + (currentposition * 100), halfway - 50, 50 + (currentposition * 100), halfway - 10);
+            bytecolor(dnasm.runningmarkers[i]);
+            ofDrawTriangle(32 + (currentposition * 100), halfway - 46, 68 + (currentposition * 100), halfway - 46, 50 + (currentposition * 100), halfway - 17);
+        }
     }
     ofSetColor(0);
-    ofDrawTriangle(25, ofGetHeight()/2 - 50, 75, ofGetHeight()/2 - 50, 50, ofGetHeight()/2 - 10);
-    // for (char marker : dnasm.runningmarkers) {
-
-    // }
-    gui.draw();
+    ofDrawCircle(50 + ((dnasm.ribcursor - position) * 100), halfway + 30, 10);
+    ofSetColor(255);
+    ofDrawCircle(50 + ((dnasm.ribcursor - position) * 100), halfway + 30, 5);
+    gui.draw(); 
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
     switch (key) {
     case ' ':
-        // test.operator=(" ");
+        // test1.operator=(" ");
         dnasm.step();
         break;
     
-    case 'E': //????????????????????? i have no idea what the keycode for enter is
-        test.operator=("ENTER");
+    case 'p':
+        // play
         break;
     
     case 'a':
-        // test.operator=("a");
+        // test1.operator=("a");
         position.operator=(position - 1);
         if (position < 0) { position.operator=(0); }
         break;
     case 'd':
-        // test.operator=("d");
+        // test1.operator=("d");
         position.operator=(position + 1);
         if (position > (dnasm.length - 10)) { position.operator=(dnasm.length - 10); }
         break;
 
     case 'w':
-        // test.operator=("w");
+        // test1.operator=("w");
         speed.operator=(speed + 5);
         if (speed > 100) { speed.operator=(100); }
         break;
     case 's':
-        // test.operator=("s");
+        // test1.operator=("s");
         speed.operator=(speed - 5);
         if (speed < 0) { speed.operator=(0); }
         break;
-
-    case 't':
-        test.operator=(std::to_string(dnasm.markers[0]));
-        break;
-
+    
     default:
         break;
     }

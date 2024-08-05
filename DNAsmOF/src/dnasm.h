@@ -45,14 +45,14 @@ class DNAsm {
     vector<char> runningmarkers; // markers of all running enzymes
     char recentmarker; // marker of the enzyme that was most recently run
     char workingmarker; // marker of the enzyme currently being transcribed
-    bool attached = false; // true if ribosome is currently attached
-    bool writing = false; // true if ribosome is currently writing
-    bool commenting = false; // true if ribosome is currently commenting
-    int ribcursor = 0; // ribosomes position/cursor
+    bool attached; // true if ribosome is currently attached
+    bool writing; // true if ribosome is currently writing
+    bool commenting; // true if ribosome is currently commenting
+    int ribcursor; // ribosomes position/cursor
     string ribcurrent; // decodon at ribosomes cursor
     vector<char> workingcodons; // codons of ribosomes working enzyme
     vector<string> workingdecodons; // decodons of ribosomes working enzyme
-    int cooldown = 0; // cooldown, used for when ribosome has to read bytes for timing but doesn't need to actually do anything with them
+    int cooldown; // cooldown, used for when ribosome has to read bytes for timing but doesn't need to actually do anything with them
     int initialcursor; // where readied enzymes are deployed to at first 
 
     void runproteins();
