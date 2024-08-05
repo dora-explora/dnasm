@@ -59,6 +59,7 @@ void Enzyme::instructionjump () {
     // cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
 }
 char* Enzyme::step(char* globalcodons) {
+
     string current = decodons[instrptr];
     if (globalcodons[cursor] == subarg1 && substituting) {
         globalcodons[cursor] = subarg2;
@@ -84,7 +85,7 @@ char* Enzyme::step(char* globalcodons) {
         cooldown--;
     } else if (current == "CurJmp") {
         cooldown = 4;
-    } else if (current == "InsJmp") {
+    } else if (current == "InsJmp") {   
         cooldown = 4;
     } else if (current == "Substi") {
         cooldown = 2;
@@ -302,6 +303,7 @@ void DNAsm::decode() {
 // this will setup dnasm, and will be executed in scope of ofApp.cpp
 void DNAsm::setup(string filename) {
     time = 0;
+    running = true;
     DNAsm::open(filename);
     DNAsm::decode();
 
@@ -313,12 +315,21 @@ void DNAsm::setup(string filename) {
 }
 
 void DNAsm::step() {
-    for (char recentmarker : runningmarkers) {
-        codons = enzymes.at(recentmarker).step(codons);
-        decode();
+    if (running && time < 2147483647 && ribcursor < (length - 1)) {
+        for (char currentmarker : runningmarkers) {
+            Enzyme currentenzyme = enzymes.at(currentmarker);
+            if (currentenzyme.instrptr >= currentenzyme.decodons.size() || currentenzyme.cursor >= length) { 
+                runningmarkers.erase(remove(runningmarkers.begin(), runningmarkers.end(), currentmarker), runningmarkers.end());
+            } else {
+                codons = enzymes.at(currentmarker).step(codons);
+            }
+            decode();
+        }
+        ribstep();
+        time++;
+        ribcursor++;
+    } else {
+        running = false;
     }
-    ribstep();
-    time++;
-    ribcursor++;
     // then execute the ribosomes stuff
 }

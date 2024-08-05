@@ -9,9 +9,8 @@ ofxIntField position;
 ofxButton play;
 ofxIntField speed;
 
-// ofxLabel test1;
-// ofxLabel test2;
-// ofxLabel test3;
+ofxLabel test1;
+ofxLabel test2;
 
 void bytecolor(char byte) {
     int red;
@@ -66,7 +65,7 @@ void bytecolor(char byte) {
 void ofApp::setup(){
 
     string filename;
-    filename = "../../DNAsm.bin";
+    filename = "../../stepfwd.bin";
 	dnasm.setup(filename);
 
     gui.setup();
@@ -74,9 +73,8 @@ void ofApp::setup(){
     gui.add(position.setup("position", 0, 0, dnasm.length - 10));
     gui.add(play.setup("play"));
     gui.add(speed.setup("speed", 10, 0, 100));
-    // gui.add(test1.setup("",""));
-    // gui.add(test2.setup("",""));
-    // gui.add(test3.setup("",""));
+    gui.add(test1.setup("",""));
+    gui.add(test2.setup("",""));
 
     ofBackground(255);
 	ofSetCircleResolution(100);
@@ -89,8 +87,9 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    // test1.operator=(dnasm.decodons[dnasm.ribcursor]);
-    // test2.operator=(std::to_string(position));
+    test1.operator=(dnasm.decodons[dnasm.ribcursor]);
+    test2.operator=(std::to_string(dnasm.runningmarkers.size()));
+    if (!dnasm.running) { test1.operator=("finished!"); ofBackground(200); }
 }
 
 //--------------------------------------------------------------

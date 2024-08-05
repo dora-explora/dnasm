@@ -31,6 +31,7 @@ class DNAsm {
 	string* decodons;
     int time;
     int length;
+    bool running;
     map<char, Enzyme> enzymes; // all enzymes and their markers
     vector<char> markers; // all markers in order of when their enzymes were written, readied, running, or not.
 
@@ -43,7 +44,7 @@ class DNAsm {
 
     vector<char> readiedmarkers; // markers of all readied enzymes, clears on runproteins();
     vector<char> runningmarkers; // markers of all running enzymes
-    char recentmarker; // marker of the enzyme that was most recently run
+    char currentmarker; // marker of the enzyme that was most recently run
     char workingmarker; // marker of the enzyme currently being transcribed
     bool attached; // true if ribosome is currently attached
     bool writing; // true if ribosome is currently writing
