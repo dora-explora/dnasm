@@ -11,6 +11,7 @@ ofxIntField speed;
 
 ofxLabel test;
 
+
 void bytecolor(char byte) {
     int red;
     int green;
@@ -60,10 +61,6 @@ void bytecolor(char byte) {
     ofSetColor(red, green, blue);
 }
 
-void step() {
-    // for finish detection and stuffs like that
-}
-
 //--------------------------------------------------------------
 void ofApp::setup(){
 
@@ -87,7 +84,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    test.operator=(std::to_string(dnasm.ribosome.ribcursor));
+    test.operator=(dnasm.decodons[dnasm.ribcursor]);
 }
 
 //--------------------------------------------------------------
@@ -103,6 +100,11 @@ void ofApp::draw(){
         bytecolor(dnasm.codons[i + position]);
         ofDrawRectangle(20 + 5 + (i * 100), ofGetHeight()/2 + 5, 50, 50);
     }
+    ofSetColor(0);
+    ofDrawTriangle(25, ofGetHeight()/2 - 50, 75, ofGetHeight()/2 - 50, 50, ofGetHeight()/2 - 10);
+    // for (char marker : dnasm.runningmarkers) {
+
+    // }
     gui.draw();
 }
 
@@ -110,7 +112,7 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key) {
     switch (key) {
     case ' ':
-        test.operator=(" ");
+        // test.operator=(" ");
         dnasm.step();
         break;
     
@@ -119,25 +121,29 @@ void ofApp::keyPressed(int key) {
         break;
     
     case 'a':
-        test.operator=("a");
+        // test.operator=("a");
         position.operator=(position - 1);
         if (position < 0) { position.operator=(0); }
         break;
     case 'd':
-        test.operator=("d");
+        // test.operator=("d");
         position.operator=(position + 1);
         if (position > (dnasm.length - 10)) { position.operator=(dnasm.length - 10); }
         break;
 
     case 'w':
-        test.operator=("w");
+        // test.operator=("w");
         speed.operator=(speed + 5);
         if (speed > 100) { speed.operator=(100); }
         break;
     case 's':
-        test.operator=("s");
+        // test.operator=("s");
         speed.operator=(speed - 5);
         if (speed < 0) { speed.operator=(0); }
+        break;
+
+    case 't':
+        test.operator=(std::to_string(dnasm.markers[0]));
         break;
 
     default:

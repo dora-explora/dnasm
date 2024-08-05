@@ -25,9 +25,23 @@ class Enzyme {
     char* step(char* globalcodons);
 };
 
-class Ribosome {
+class DNAsm {
     public:
-    vector<char> readiedmarkers; // markers of all readied enzymes
+	char* codons;
+	string* decodons;
+    int time;
+    int length;
+    map<char, Enzyme> enzymes; // all enzymes and their markers
+    vector<char> markers; // all markers in order of when their enzymes were written, readied, running, or not.
+
+    void open(string filename);
+    void decode();
+    void setup(string filename);
+    void step();
+    void display();
+    void display_enzymes(vector<char> markers, map<char, Enzyme> enzymes);
+
+    vector<char> readiedmarkers; // markers of all readied enzymes, clears on runproteins();
     vector<char> runningmarkers; // markers of all running enzymes
     char recentmarker; // marker of the enzyme that was most recently run
     char workingmarker; // marker of the enzyme currently being transcribed
@@ -43,25 +57,7 @@ class Ribosome {
 
     void runproteins();
     void ribosomejump();
-    void step();
-};
-
-class DNAsm {
-    public:
-	char* codons;
-	string* decodons;
-    int time;
-    int length;
-    map<char, Enzyme> enzymes; // all enzymes and their markers
-    vector<char> markers; // all markers in order of when their enzymes were written, readied, running, or not.
-    Ribosome ribosome;
-
-    void open(string filename);
-    void decode();
-    void setup(string filename);
-    void step();
-    void display();
-    void display_enzymes(vector<char> markers, map<char, Enzyme> enzymes);
+    void ribstep();
 };
 
 #endif //DNASM_H

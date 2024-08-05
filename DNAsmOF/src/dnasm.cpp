@@ -106,7 +106,7 @@ map<char, Enzyme> enzymes; // all enzymes and their markers
 vector<char> markers; // all markers in order of when their enzymes were written, readied, running, or not.
 
 // Ribosome definition
-void Ribosome::runproteins() {
+void DNAsm::runproteins() {
     for (int i = 0; i < readiedmarkers.size(); i++) { 
         runningmarkers.push_back(readiedmarkers[i]); 
         initialcursor = 0;
@@ -119,7 +119,7 @@ void Ribosome::runproteins() {
     readiedmarkers.clear();
 }
 
-void Ribosome::ribosomejump() {
+void DNAsm::ribosomejump() {
     int tempribcursor = ribcursor;
     ribcursor = 0;
     ribcursor |= (codons[tempribcursor-3] & 0x3F) << 18;
@@ -128,9 +128,8 @@ void Ribosome::ribosomejump() {
     ribcursor |= (codons[tempribcursor] & 0x3F);
 }
 
-void Ribosome::step() {
-    // ribcurrent = decodons[ribcursor];
-    ribcurrent = "Attach";
+void DNAsm::ribstep() {
+    ribcurrent = decodons[ribcursor];
     if (commenting) {
         // do absolutely nothing, its a comment
         if (ribcurrent == "Commnt") { commenting = false; }
@@ -304,17 +303,15 @@ void DNAsm::setup(string filename) {
     time = 0;
     DNAsm::open(filename);
     DNAsm::decode();
-
-    Ribosome ribosome;
 }
 
 void DNAsm::step() {
-    for (char recentmarker : ribosome.runningmarkers) {
+    for (char recentmarker : runningmarkers) {
         codons = enzymes.at(recentmarker).step(codons);
         decode();
     }
-    // then execute the ribosomes stuff
-    ribosome.step();
+    ribstep();
     time++;
-    ribosome.ribcursor++;
+    ribcursor++;
+    // then execute the ribosomes stuff
 }
