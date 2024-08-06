@@ -11,7 +11,7 @@ class Enzyme {
     vector<string> decodons; // all the enzymes decodons
     int length; // length of enzymes code, starts at 0 (for iterating)
     int cursor; // cursor for where the enzyme is in the code
-    int instrptr; // instruction pointer
+    uint32_t instrptr; // instruction pointer
     char subarg1; // first arg for substitution 
     char subarg2; // second arg for substitution
     int cooldown; // how long to wait for args to be read
@@ -30,7 +30,7 @@ class DNAsm {
 	char* codons;
 	string* decodons;
     int time;
-    int length;
+    uint32_t length;
     bool running;
     map<char, Enzyme> enzymes; // all enzymes and their markers
     vector<char> markers; // all markers in order of when their enzymes were written, readied, running, or not.

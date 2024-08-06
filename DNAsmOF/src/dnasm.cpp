@@ -15,7 +15,7 @@ using namespace std;
 
 string* decodons; // all decodons in strings (human readable and properly identified)
 char* codons; // all codons in chars (single bytes)
-int length; // length of file in bytes (codons)
+uint32_t length; // length of file in bytes (codons)
 
 // Enzyme definition
 Enzyme::Enzyme(vector<char> incodons, vector<string> indecodons) {
@@ -109,7 +109,7 @@ vector<char> markers; // all markers in order of when their enzymes were written
 
 // Ribosome definition
 void DNAsm::runproteins() {
-    for (int i = 0; i < readiedmarkers.size(); i++) { 
+    for (uint32_t i = 0; i < readiedmarkers.size(); i++) { 
         runningmarkers.push_back(readiedmarkers[i]); 
         initialcursor = 0;
         initialcursor |= (codons[ribcursor-3] & 0x3F) << 18;
@@ -186,9 +186,9 @@ void DNAsm::display() {
 
 void DNAsm::display_enzymes(vector<char> markers, map<char, Enzyme> enzymes) {
     if (!markers.empty()) {
-         for (int i = 0; i < (markers.size()); i++) {
+         for (uint32_t i = 0; i < (markers.size()); i++) {
              cout << "\nEnzyme #" << i << " with marker 0b" << bitset<6>(markers[i]) << endl;
-             for (int j = 0; j < enzymes.at(markers[i]).decodons.size(); j++) {
+             for (uint32_t j = 0; j < enzymes.at(markers[i]).decodons.size(); j++) {
                  cout << "#" << j << ": 0b" << bitset<6>(enzymes.at(markers[i]).codons[j]) << " - " << enzymes.at(markers[i]).decodons[j] << endl;
              }
          }

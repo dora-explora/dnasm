@@ -4,20 +4,22 @@
 
 DNAsm dnasm;
 
-ofxPanel gui;
-ofxIntField position;
-ofxToggle play;
-ofxToggle follow;
-bool help;
-ofxIntField speed;
+ofxPanel gui; // entire gui panel
+ofxIntField position; // viewports position
+ofxToggle play; // whether or not the program is automatically running
+ofxToggle follow; // whether or not to follow the ribosome in the program
+bool help; // whether or not to display the help text
+ofxFloatField speed; // the speed of the program in steps per second
+
+int width; // number of squares that could fit on screen; ceil(width of window / 100)
 
 ofxLabel test1;
 ofxLabel test2;
 
 void bytecolor(char byte) {
-    int red;
-    int green;
-    int blue;
+    int red  = 0;
+    int green = 0;
+    int blue = 0;
     switch (byte & 0b00110000) {
     case 0b00000000:
         red = 0;
@@ -63,15 +65,28 @@ void bytecolor(char byte) {
     ofSetColor(red, green, blue);
 }
 
+void open() {
+    ofFileDialogResult file = ofSystemLoadDialog("Load DNAsm file");   
+    if(file.bSuccess) {
+      dnasm.setup(file.getPath());
+    } else {
+        // end the program??????????
+    }
+}
+
+void setwidth(int w) {
+    width = std::ceil(w / 100) + 1;
+    if (width > (dnasm.length - position)) { width = (dnasm.length - position); }
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
 
     string filename;
     filename = "../../stepfwd.bin";
-	dnasm.setup(filename);
+	open();
 
     gui.setup();
-    // "Press space to step forward in time,\n\'a\' and \'d\' to step left and right,\nand \'w\' and \'s\' to up the speed by 5."
     gui.add(position.setup("position:", 0, 0, dnasm.length - 10));
     gui.add(play.setup("play", false));
     gui.add(follow.setup("follow ribosome", false));
@@ -81,6 +96,7 @@ void ofApp::setup(){
 
     help = true;
     ofBackground(255);
+    width = 10;
 	ofSetCircleResolution(100);
     ofFill();
     ofSetLineWidth(10);
@@ -98,7 +114,7 @@ void ofApp::update() {
         ofResetElapsedTimeCounter();
         dnasm.step();
     }
-    if (follow && dnasm.ribcursor > 4 && dnasm.ribcursor < (dnasm.length - 5)) {
+    if (follow && dnasm.ribcursor > 4 && dnasm.ribcursor < (dnasm.length - width/2)) {
         position = (dnasm.ribcursor - 4);
     }
 }
@@ -106,22 +122,27 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw(){
     float halfway = ofGetHeight()/2;
-    for (int i = 0; i < 10; i++) {
+    // draw codon squares
+    for (int i = 0; i < width; i++) {
         ofSetColor(0);
         ofDrawRectRounded(18 + (i * 100), halfway - 2, 64, 64, 10);
         ofDrawBitmapString(dnasm.decodons[i + position], 28 + (i * 100), halfway + 80);
         bytecolor(dnasm.codons[i + position]);
         ofDrawRectRounded(20 + 5 + (i * 100), halfway + 5, 50, 50, 5);
     }
-    for (int i = 0; i < dnasm.runningmarkers.size(); i++) {
-        int currentposition = (dnasm.enzymes.at(dnasm.runningmarkers[i]).cursor - position);
-        if (currentposition <= 9 && currentposition >= 0) {
+    // draw enzyme triangles
+    for (uint32_t i = 0; i < dnasm.runningmarkers.size(); i++) {
+        Enzyme currentenzyme = dnasm.enzymes.at(dnasm.runningmarkers[i]);
+        int currentposition = (currentenzyme.cursor - position);
+        if (currentposition < width && currentposition >= 0) {
             ofSetColor(0);
             ofDrawTriangle(25 + (currentposition * 100), halfway - 50, 75 + (currentposition * 100), halfway - 50, 50 + (currentposition * 100), halfway - 10);
+            ofDrawBitmapString(currentenzyme.decodons[currentenzyme.instrptr], 25 + (currentposition * 100), halfway - 55);
             bytecolor(dnasm.runningmarkers[i]);
             ofDrawTriangle(32 + (currentposition * 100), halfway - 46, 68 + (currentposition * 100), halfway - 46, 50 + (currentposition * 100), halfway - 17);
         }
     }
+    // draw ribosome dot
     ofSetColor(0);
     ofDrawCircle(50 + ((dnasm.ribcursor - position) * 100), halfway + 30, 10);
     ofSetColor(255);
@@ -135,9 +156,8 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
     switch (key) {
-    case ' ':
-        // test1.operator=(" ");
-        dnasm.step();
+    case 'o':
+        open();
         break;
     case 'p':
         if (play) { play.operator=(false); }
@@ -151,16 +171,26 @@ void ofApp::keyPressed(int key) {
         if (help) { help = false; }
         else if (!help) { help = true; }
         break;
+    case ' ':
+        // test1.operator=(" ");
+        dnasm.step();
+        break;
     
     case 'a':
         // test1.operator=("a");
         position.operator=(position - 1);
         if (position < 0) { position.operator=(0); }
+        setwidth(ofGetWidth());
+        // ofSetWindowPosition(ofGetWindowPositionX() - 100, ofGetWindowPositionY()); // this is for fun :3
         break;
     case 'd':
         // test1.operator=("d");
         position.operator=(position + 1);
-        if (position > (dnasm.length - 10)) { position.operator=(dnasm.length - 10); }
+        if (position > (dnasm.length - width)) { 
+            position.operator=(dnasm.length - width); 
+            ofSetWindowShape((width * 100), ofGetHeight());
+        }
+        // ofSetWindowPosition(ofGetWindowPositionX() + 100, ofGetWindowPositionY()); // this too :3
         break;
 
     case 'w':
@@ -171,7 +201,7 @@ void ofApp::keyPressed(int key) {
     case 's':
         // test1.operator=("s");
         speed.operator=(speed - 5);
-        if (speed < 1) { speed.operator=(1); }
+        if (speed <= 0) { speed.operator=(1); }
         break;
     
     default:
@@ -215,7 +245,7 @@ void ofApp::mouseExited(int x, int y) {
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h) {
-
+    setwidth(w);
 }
 
 //--------------------------------------------------------------
