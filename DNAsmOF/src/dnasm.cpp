@@ -307,10 +307,16 @@ void DNAsm::setup(string filename) {
     DNAsm::open(filename);
     DNAsm::decode();
 
+    enzymes.clear();
+    markers.clear();
+    readiedmarkers.clear();
+    runningmarkers.clear();
     attached = 0;
     writing = 0;
     commenting = 0;
     ribcursor = 0;
+    workingcodons.clear();
+    workingdecodons.clear();
     cooldown = 0;
 }
 

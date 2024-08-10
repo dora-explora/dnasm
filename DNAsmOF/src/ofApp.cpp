@@ -68,7 +68,12 @@ void bytecolor(char byte) {
 void open() {
     ofFileDialogResult file = ofSystemLoadDialog("Load DNAsm file");   
     if(file.bSuccess) {
-      dnasm.setup(file.getPath());
+        dnasm.setup(file.getPath());
+        ofBackground(255);
+        position.operator=(0);
+        play.operator=(false);
+        follow.operator=(false);
+        speed.operator=(10);
     } else {
         // end the program??????????
     }
@@ -82,8 +87,6 @@ void setwidth(int w) {
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    string filename;
-    filename = "../../stepfwd.bin";
 	open();
 
     gui.setup();
@@ -188,7 +191,7 @@ void ofApp::keyPressed(int key) {
         position.operator=(position + 1);
         if (position > (dnasm.length - width)) { 
             position.operator=(dnasm.length - width); 
-            ofSetWindowShape((width * 100), ofGetHeight());
+            // ofSetWindowShape((width * 100), ofGetHeight());
         }
         // ofSetWindowPosition(ofGetWindowPositionX() + 100, ofGetWindowPositionY()); // this too :3
         break;
