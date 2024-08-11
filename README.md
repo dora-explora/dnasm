@@ -33,8 +33,6 @@ The codon after 110000 (Begin protein) is the proteins **marker**. This identifi
 | 111000      | Step Forward | Set the cursor forward a codon. |
 | 000111      | Step Backward | Set the cursor back a codon. |
 | 000100      | Output | 000100a will push a to the output strand (cout/stdout). |
-| 000101      | Output at Cursor | Outputs the value of the current location codon to the output strand (cout/stdout). |
-| 111111      | Execute | Execute the codon at the cursor as an instruction. |
 | 000000      | Blank | Does absolutely nothing. |
 
 **Note:** Comments and Outputs are ascii with a prefix of 0b01, with a codon of 111111 being replaced with space. This is all ascii characters from 01000000 to 01111101, 64 to 126, as well as ' '.

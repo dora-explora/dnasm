@@ -58,6 +58,7 @@ void Enzyme::instructionjump () {
     instrptr |= (codons[tempinstrptr] & 0x3F);
     // cout << "Instruction pointer: " << bitset<24>(instrptr) << endl;
 }
+
 char* Enzyme::step(char* globalcodons) {
 
     string current = decodons[instrptr];
@@ -97,9 +98,7 @@ char* Enzyme::step(char* globalcodons) {
         cursor--;
     } else if (current == "Output") {
         print(codons[instrptr + 1]);
-    } else if (current == "OutCur") {
-        // yeahhhhhhhhh i need to figure this out
-    } 
+    }
     instrptr++;
     return globalcodons;
 };
@@ -288,10 +287,6 @@ void DNAsm::decode() {
             decodons[i] = "Output";
             decodons[i+1] = "Arg 1 ";
             i++;
-        } else if (attached && writing && codons[i] == 0b000101) {
-            decodons[i] = "OutCur";
-        } else if (attached && writing && codons[i] == 0b111111) {
-            decodons[i] = "Execut";
         } else if (attached && writing && codons[i] == 0b000000) {
             decodons[i] = "Blank ";
         } else {
@@ -331,11 +326,11 @@ void DNAsm::step() {
             }
             decode();
         }
-        ribstep();
-        time++;
-        ribcursor++;
+    // then execute the ribosomes stuff
+    ribstep();
+    time++;
+    ribcursor++;
     } else {
         running = false;
     }
-    // then execute the ribosomes stuff
 }
