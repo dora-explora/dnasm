@@ -56,3 +56,25 @@ At the start of their turn, enzymes will check the codon at their cursor for a m
 Every time the ribosome passes an instruction, time will step. Because of this, the ribosome always executes last. At the start of the program, the ribosome will execute until it deploys an enzyme. After that, enzymes will execute in the order they were written until the ribosome steps/executes, and then time steps again.
 
 When an enzymes turn comes up, they will read, execute, and finish the instruction before the order moves on to the next enzyme/ribosome.
+
+## How To Use
+
+Programs can be run with DNAsmOF.exe in the DNAsm.exe or dnasmcl.exe for command line or a gui. The gui version is rather unstable though, and can be slow. You can also use dnasmparser.exe to write programs with the names of the instructions instead of binary (except for the arguments.) The table for how each instruction is typed in dnasm parser is below.
+
+| Instruction | Code |
+|-------------|------|
+| Attach | Attach |
+| Begin Protein | BegPro |
+| End Protein | EndPro |
+| Detach | Detach |
+| Run Proteins | RunPro |
+| Ready | Ready  |
+| Comment | Comment |
+| Cursor Jump | JmpCur |
+| Instruction Jump | JmpIns |
+| Substitution | Substi |
+| Insert | Insert |
+| Advance | Advanc |
+| Set Forward | SetFwd |
+| Set Backward | SetBwd |
+| Output | Output |

@@ -27,8 +27,6 @@ map<string, char> codontable {
     {"StpFwd", 0b111000},
     {"StpBwd", 0b000111},
     {"Output", 0b000100},
-    {"OutCur", 0b000101},
-    {"Execut", 0b111111},
     {"Blank ", 0b000000},
 };
 
@@ -87,11 +85,11 @@ int main() {
     string filename;
     string content;
     vector<Token> tokens; 
-    // cout << "Please enter the files name: ";
-    // cin >> filename;
-    filename = "dnasmparserexampleB.txt";
+    cout << "Please enter the files name: ";
+    cin >> filename;
     content = open(filename);
     replace(content.begin(), content.end(), '\n', ' ');
+    replace(content.begin(), content.end(), '\r', ' ');
     istringstream stream(content);
     string workingtokentext; 
     while (getline(stream, workingtokentext, ' ') || getline(stream, workingtokentext, '\n')) {
@@ -107,9 +105,8 @@ int main() {
         }
         cout << "0b" << bitset<6>(tokens[i].codon) << endl;
     }
-    // cout << "Please enter the name of your output file: ";
-    // cin >> filename;
-    filename = "dnasmparserexampleB.bin";
+    cout << "Please enter the name of your output file: ";
+    cin >> filename;
     write(filename, tokens);
     return 1;
 }
