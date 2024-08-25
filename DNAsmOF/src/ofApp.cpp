@@ -13,9 +13,6 @@ ofxFloatField speed; // the speed of the program in steps per second
 
 int width; // number of squares that could fit on screen; ceil(width of window / 100)
 
-ofxLabel test1;
-ofxLabel test2;
-
 void bytecolor(char byte) {
     int red  = 0;
     int green = 0;
@@ -94,8 +91,6 @@ void ofApp::setup(){
     gui.add(play.setup("play", false));
     gui.add(follow.setup("follow ribosome", false));
     gui.add(speed.setup("speed:", 10, 1, 100));
-    gui.add(test1.setup("",""));
-    gui.add(test2.setup("",""));
 
     help = true;
     ofBackground(255);
@@ -110,9 +105,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-    test1.operator=(dnasm.decodons[dnasm.ribcursor]);
-    test2.operator=(std::to_string(dnasm.runningmarkers.size()));
-    if (!dnasm.running) { test1.operator=("finished!"); ofBackground(200); }
+    if (!dnasm.running) { ofBackground(200); }
     if (ofGetElapsedTimeMillis() >= (1000 / speed) && play) {
         ofResetElapsedTimeCounter();
         dnasm.step();
@@ -175,19 +168,16 @@ void ofApp::keyPressed(int key) {
         else if (!help) { help = true; }
         break;
     case ' ':
-        // test1.operator=(" ");
         dnasm.step();
         break;
     
     case 'a':
-        // test1.operator=("a");
         position.operator=(position - 1);
         if (position < 0) { position.operator=(0); }
         setwidth(ofGetWidth());
         // ofSetWindowPosition(ofGetWindowPositionX() - 100, ofGetWindowPositionY()); // this is for fun :3
         break;
     case 'd':
-        // test1.operator=("d");
         position.operator=(position + 1);
         if (position > (dnasm.length - width)) { 
             position.operator=(dnasm.length - width); 
@@ -197,12 +187,10 @@ void ofApp::keyPressed(int key) {
         break;
 
     case 'w':
-        // test1.operator=("w");
         speed.operator=(speed + 5);
         if (speed > 100) { speed.operator=(100); }
         break;
     case 's':
-        // test1.operator=("s");
         speed.operator=(speed - 5);
         if (speed <= 0) { speed.operator=(1); }
         break;
