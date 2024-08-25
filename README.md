@@ -4,6 +4,8 @@
 
 This language is written in codons of protein instructions next to codons of data, which the proteins modify or interperet as instructions. Multiple proteins can run simultaneously, and can potentially move along unwanted strings of data.
 
+Big thanks to Open Frameworks for making the entire GUI possible and to Hack Club Arcade for motivating me to make this entire project over the summer!
+
 ## Instructions
 
 ### Ribosome Instructions
@@ -59,7 +61,7 @@ When an enzymes turn comes up, they will read, execute, and finish the instructi
 
 ## How To Use
 
-Programs can be run with DNAsmOF.exe in the DNAsm.exe or dnasmcl.exe for command line or a gui. The gui version is rather unstable though, and can be slow. You can also use dnasmparser.exe to write programs with the names of the instructions instead of binary (except for the arguments.) The table for how each instruction is typed in dnasm parser is below.
+Programs can be run with DNAsmOF.exe in the DNAsm.exe or dnasmcl.exe for command line or a gui. The gui version is rather unstable though, and can be slow. You can also use dnasmparser.exe to write programs with the names of the instructions instead of binary (except for the arguments.) The table for how each instruction is typed in dnasmparser is below. Both command line programs accept arguments, dnasmcl with 1 and dnasmparser with 2.
 
 | Instruction | Code |
 |-------------|------|

@@ -54,7 +54,7 @@ class Token {
 
 };
 
-string open(string filename) {
+string openfile(string filename) {
     int length = 0;
     // read file
     ifstream file(filename, ios::binary | ios::in);
@@ -81,13 +81,23 @@ void write(string filename, vector<Token> tokens) {
     }
 }
 
-int main() {
-    string filename;
+int main(int argc, char* argv[]) {
+    string inputfilename;
+    string outputfilename;
+    if (argc == 1) {
+        cout << "Type in the name of your file (ex. DNAsm.txt): ";
+        cin >> inputfilename;
+    } else if (argc == 2) {
+        inputfilename = argv[1];
+    } else if (argc == 3) {
+        inputfilename = argv[1];
+        outputfilename = argv[2];
+    } else {
+        throw std::invalid_argument("Too many arguments. Only type one or two arguments for the file name(s).");
+    }
     string content;
     vector<Token> tokens; 
-    cout << "Please enter the files name: ";
-    cin >> filename;
-    content = open(filename);
+    content = openfile(inputfilename);
     replace(content.begin(), content.end(), '\n', ' ');
     replace(content.begin(), content.end(), '\r', ' ');
     istringstream stream(content);
@@ -105,8 +115,10 @@ int main() {
         }
         cout << "0b" << bitset<6>(tokens[i].codon) << endl;
     }
-    cout << "Please enter the name of your output file: ";
-    cin >> filename;
-    write(filename, tokens);
+    if (argc != 3) {
+        cout << "Please enter the name of your output file: ";
+        cin >> outputfilename;
+    }
+    write(outputfilename, tokens);
     return 1;
 }
