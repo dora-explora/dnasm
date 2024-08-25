@@ -153,7 +153,7 @@ void ofApp::draw(){
     gui.draw(); 
 
     ofSetColor(0);
-    if (help) { ofDrawBitmapString("Press 'o' to open a file, 'p' to play, 'f' to follow,\nspace to step once, 'a' and 'd' to scroll left and right,\n'w' and 's' to change the speed by 5 steps per second,\nand press 'h' to toggle this text.", 230, 30); }
+    if (help) { ofDrawBitmapString("Press 'o' to open a file, 'p' to play, 'f' to follow,\nspace to step once, 'a' and 'd' to scroll left and right,\n'w' and 's' to change the speed by 5 steps per second,\nand 'h' to toggle this text.", 230, 30); }
 }
 
 //--------------------------------------------------------------
