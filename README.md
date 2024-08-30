@@ -2,7 +2,7 @@
 
 **An esoteric programming language based off the behavior of DNA and RNA.**
 
-This language is written in codons of protein instructions next to codons of data, which the proteins modify or interperet as instructions. Multiple proteins can run simultaneously, and can potentially move along unwanted strings of data.
+This language is written as one continuous string of DNA made of codons, 6 bit long instructions. The program is fed into the ribosome, which makes enzymes and executes instructions read from the DNA. Enzymes have their own instructions, defined when they're created, that they run themselves.
 
 Big thanks to Open Frameworks for making the entire GUI possible and to Hack Club Arcade for motivating me to make this entire project over the summer!
 
