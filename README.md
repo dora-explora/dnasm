@@ -4,7 +4,34 @@
 
 This language is written as one continuous string of DNA made of codons, 6 bit long instructions. The program is fed into the ribosome, which makes enzymes and executes instructions read from the DNA. Enzymes have their own instructions, defined when they're created, that they run themselves.
 
-Big thanks to Open Frameworks for making the entire GUI possible and to Hack Club Arcade for motivating me to make this entire project over the summer!
+## How to Use
+
+Download and extract DNAsm.zip from GitHub's releases. If you want a GUI, you can use DNAsmOF.exe in the DNAsmOF folder. If you want to use the command line version, use dnasmcl.exe. There also a parser that lets you write instructions by their name. dnasmcl.exe takes on argument, the input binary file, while the parser takes two, an input text file and an output binary file. All these programs will only work on Windows, since that's what I use. If you want to compile dnasmcl or dnasmparser for anything else, the source code is in the release. If you want to compile the GUI version, you'll need to follow the tutorial from OpenFrameworks. The source code for the GUI is also available in ./DNAsmOF/src. There are a few examples in the examples folder for DNAsm and the parser that you can try! 
+
+Big thanks to Open Frameworks for making the entire GUI possible, to Hack Club Arcade for motivating me to make this entire project over the summer, and everyone who voted for my project in Hack Club Showcase!
+
+### DNAsm Parser
+
+The table for how each instruction is typed in dnasmparser is below.
+
+| Instruction | Code |
+|-------------|------|
+| Attach | Attach |
+| Begin Protein | BegPro |
+| End Protein | EndPro |
+| Detach | Detach |
+| Run Proteins | RunPro |
+| Ready | Ready  |
+| Comment | Comment |
+| Cursor Jump | JmpCur |
+| Instruction Jump | JmpIns |
+| Substitution | Substi |
+| Insert | Insert |
+| Advance | Advanc |
+| Set Forward | SetFwd |
+| Set Backward | SetBwd |
+| Output | Output |
+
 
 ## Instructions
 
@@ -59,24 +86,3 @@ Every time the ribosome passes an instruction, time will step. Because of this, 
 
 When an enzymes turn comes up, they will read, execute, and finish the instruction before the order moves on to the next enzyme/ribosome.
 
-## How To Use
-
-Programs can be run with DNAsmOF.exe in the DNASMOF folder if you want a GUI, or dnasmcl.exe for command line. The gui version is rather unstable though, and can be slow. You can also use dnasmparser.exe to write programs with the names of the instructions instead of binary (except for the arguments.) The table for how each instruction is typed in dnasmparser is below. Both command line programs accept arguments, dnasmcl with 1 arg and dnasmparser with 2 args for the input text file and output bin file.
-
-| Instruction | Code |
-|-------------|------|
-| Attach | Attach |
-| Begin Protein | BegPro |
-| End Protein | EndPro |
-| Detach | Detach |
-| Run Proteins | RunPro |
-| Ready | Ready  |
-| Comment | Comment |
-| Cursor Jump | JmpCur |
-| Instruction Jump | JmpIns |
-| Substitution | Substi |
-| Insert | Insert |
-| Advance | Advanc |
-| Set Forward | SetFwd |
-| Set Backward | SetBwd |
-| Output | Output |
