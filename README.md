@@ -61,7 +61,7 @@ When an enzymes turn comes up, they will read, execute, and finish the instructi
 
 ## How To Use
 
-Programs can be run with DNAsmOF.exe in the DNAsm.exe or dnasmcl.exe for command line or a gui. The gui version is rather unstable though, and can be slow. You can also use dnasmparser.exe to write programs with the names of the instructions instead of binary (except for the arguments.) The table for how each instruction is typed in dnasmparser is below. Both command line programs accept arguments, dnasmcl with 1 and dnasmparser with 2.
+Programs can be run with DNAsmOF.exe in the DNASMOF folder if you want a GUI, or dnasmcl.exe for command line. The gui version is rather unstable though, and can be slow. You can also use dnasmparser.exe to write programs with the names of the instructions instead of binary (except for the arguments.) The table for how each instruction is typed in dnasmparser is below. Both command line programs accept arguments, dnasmcl with 1 arg and dnasmparser with 2 args for the input text file and output bin file.
 
 | Instruction | Code |
 |-------------|------|
